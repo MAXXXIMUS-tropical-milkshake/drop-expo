@@ -1,8 +1,8 @@
 import React, {useState} from "react"
 // import styles from "./EmailVerifyPageStyles"
 import {View, SafeAreaView, Image, Text, StyleSheet} from "react-native"
-import EmailVerifyForm from "@/components/EmailVerifyForm/EmailVerifyForm.tsx"
-import EmailVerifyButton from "@/components/EmailVerifyButton/EmailVerifyButton.tsx"
+import EmailVerifyForm from "@/components/VerifyForm/VerifyForm.tsx"
+import EmailVerifyButton from "@/components/VerifyButton/VerifyButton.tsx"
 import {PageProp} from "../../components/PageProps.tsx"
 
 function EmailVerifyPage({navigation}: PageProp): React.JSX.Element {

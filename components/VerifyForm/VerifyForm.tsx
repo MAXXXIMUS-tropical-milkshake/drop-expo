@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TextInput } from "react-native";
-import styles from './EmailVerifyFormStyles.tsx'
+import styles from './VerifyFormStyles.tsx'
 
 type EmailVerifyFormProps = {
   form: {
@@ -13,7 +13,7 @@ type EmailVerifyFormProps = {
   >
 }
 
-function EmailVerifyForm(props: EmailVerifyFormProps): React.JSX.Element {
+function VerifyForm(props: EmailVerifyFormProps): React.JSX.Element {
   return (
     <View>
       <View style={styles.input}>
@@ -32,5 +32,5 @@ function EmailVerifyForm(props: EmailVerifyFormProps): React.JSX.Element {
   )
 }
 
-export default EmailVerifyForm
+export default VerifyForm;
 
