@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {
     Dimensions, StyleSheet,
@@ -67,8 +67,8 @@ function HomeScreen(): React.JSX.Element {
     );
     return (
         <GestureHandlerRootView style={{flex: 1}}>
-            <View style={{display: 'flex', flex: 1, height: "100%", flexDirection: 'column'}}
-                  id={"carousel-component"}>
+            <SafeAreaView style={{display: 'flex', flex: 1, height: "100%", flexDirection: 'column'}}
+                          id={"carousel-component"}>
                 <Carousel
                     ref={ref}
                     customAnimation={animationStyle}
@@ -92,7 +92,7 @@ function HomeScreen(): React.JSX.Element {
                     renderItem={({item}) => {
                         return Item(item);
                     }}/>
-            </View>
+            </SafeAreaView>
         </GestureHandlerRootView>
     );
 }
