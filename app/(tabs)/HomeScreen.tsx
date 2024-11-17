@@ -16,14 +16,13 @@ import Animated, {interpolate} from "react-native-reanimated";
 
 const sh = Dimensions.get("window").height * 0.5;
 const aspectRatio = 2 / 3;
-Dimensions.get("window").height * 0.2;
 const w = Dimensions.get("window").width;
 const h = Dimensions.get("window").height;
 
 function Item(it: number): React.JSX.Element {
     return (
         <Animated.View style={{
-            display: 'flex', flex: 1, alignSelf: 'center', marginVertical: 0.1 * h
+            display: 'flex', flex: 1, alignSelf: 'center', marginBottom: 0.05 * h, marginTop: 0.2 * h
         }}>
             <SquircleView
                 squircleParams={{cornerRadius: 60, cornerSmoothing: 1, fillColor: "#a23ba5"}}
@@ -54,12 +53,11 @@ function HomeScreen(): React.JSX.Element {
     const animationStyle = React.useCallback(
         (value: number) => {
             "worklet";
-            const translateY = interpolate(value, [-1, 0, 1], [-sh * 1.1, 0, sh * 1.2]);
-            const right = 0;
+            const translateY = interpolate(value, [-1, 0, 1], [-sh * 1.1, 0, sh * 1.1]);
+            const scale = interpolate(value, [-1, 0, 1], [0.93, 1.07, 0.93])
             const opacity = interpolate(value, [-0.75, 0, 1], [0.5, 1, 0.5]);
             return {
-                transform: [{translateY}],
-                right,
+                transform: [{translateY}, {scale}],
                 opacity
             };
         },
@@ -83,9 +81,7 @@ function HomeScreen(): React.JSX.Element {
                     overscrollEnabled={false}
                     loop={false}
                     modeConfig={{
-                        parallaxScrollingScale: 1,
                         parallaxScrollingOffset: 50,
-                        parallaxAdjacentItemScale: 0.9
                     }}
                     vertical={true}
                     onSnapToItem={(index: number) => console.log("current index:", index)}
@@ -98,6 +94,7 @@ function HomeScreen(): React.JSX.Element {
 }
 
 export default HomeScreen
+
 const styles = StyleSheet.create({
     button: {
         backgroundColor: '#007BFF',

@@ -7,6 +7,7 @@ import {IconSymbol} from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import {Colors} from '@/constants/Colors';
 import {useColorScheme} from '@/hooks/useColorScheme';
+import BeatUploadScreenHeader from "@/components/BeatUploadScreenHeader.tsx";
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
@@ -40,6 +41,15 @@ export default function TabLayout() {
                     tabBarIcon: ({color}) => <IconSymbol size={28} name="paperplane.fill" color={color}/>,
                     headerShown: true,
                     header: () => HomeScreenHeader({visible: filtersModalVisible, setVisible: setFiltersModalVisible}),
+                }}
+            />
+            <Tabs.Screen
+                name="BeatUploadScreen"
+                options={{
+                    title: 'Upload',
+                    tabBarIcon: ({color}) => <IconSymbol size={28} name="doc.fill.badge.ellipsis" color={color}/>,
+                    headerShown: true,
+                    header: () => BeatUploadScreenHeader()
                 }}
             />
 

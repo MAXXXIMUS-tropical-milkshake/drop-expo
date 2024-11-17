@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {Dimensions, Text, TouchableOpacity, View, StyleSheet} from "react-native";
 import FiltersModal, {FiltersModalProps} from "@/components/FiltersModal.tsx";
+import {Link} from "expo-router";
 
 
 export default function HomeScreenHeader(modalProps: FiltersModalProps): React.JSX.Element {
@@ -15,9 +16,11 @@ export default function HomeScreenHeader(modalProps: FiltersModalProps): React.J
             <TouchableOpacity style={styles.button} onPress={() => modalProps.setVisible(true)}>
                 <Text style={styles.buttonText}>Filters</Text>
             </TouchableOpacity>
+            <Link push href={"/(tabs)/BeatUploadScreen"}>
             <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>Upload beat</Text>
             </TouchableOpacity>
+            </Link>
             <FiltersModal visible={modalProps.visible} setVisible={modalProps.setVisible} />
 
         </View>);
