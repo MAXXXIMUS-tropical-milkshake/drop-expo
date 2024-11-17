@@ -9,7 +9,6 @@ type SignupProps = {
   first_name: string
   last_name: string
   nickname: string
-  navigation: any
 }
 
 function SignupButton(props: SignupProps): React.JSX.Element {
@@ -23,7 +22,6 @@ function SignupButton(props: SignupProps): React.JSX.Element {
           const nickname = props.nickname;
           const email = props.email;
           const password = props.password;
-          const navigation = props.navigation;
           fetch("http://10.0.2.2:9431/v1/auth/signup", {
             method: "POST",
             headers: {
@@ -58,7 +56,6 @@ function SignupButton(props: SignupProps): React.JSX.Element {
                 return null
               }
               Alert.alert("Регистрация успешна.")
-              //navigation.navigate("login")
             })
             .catch((error) => {
               console.error(

@@ -1,22 +1,17 @@
 import React, {useState} from "react"
-// import styles from "./SignupPageStyles"
-import {View, Image, Text, SafeAreaView, TouchableOpacity, Platform, StyleSheet} from "react-native"
-import SignupForm from "@/components/SignupForm/SignupForm.tsx"
-import SignupButton from "@/components/SignupButton/SignupButton.tsx"
-import {PageProp} from "../../components/PageProps.tsx"
-import {useTheme} from "@react-navigation/native"
+import {View, SafeAreaView, Image, Text, TouchableOpacity, StyleSheet} from "react-native"
+import LoginForm from "@/components/LoginForm/LoginForm.tsx"
+import LoginButton from "@/components/LoginButton/LoginButton.tsx"
+import { useRouter } from "expo-router"
 
-function SignupPage({navigation}: PageProp): React.JSX.Element {
+function LoginPage(): React.JSX.Element {
+    const router = useRouter();
     const [form, setForm] = useState({
-        username: "",
         email: "",
         password: "",
-        nickname: "",
-        first_name: "",
-        last_name: "",
     })
     return (
-        <SafeAreaView style={Platform.OS != 'web' ? styles.container : styles.containerWeb}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Image
                     source={require("../../assets/droplogo.png")}
@@ -24,33 +19,28 @@ function SignupPage({navigation}: PageProp): React.JSX.Element {
                     alt="Logo"
                 />
                 <Text style={styles.title}>
-                    Sign up to <Text style={styles.titleDrop}>Drop</Text>
+                    Sign in to <Text style={styles.titleDrop}>Drop</Text>
                 </Text>
             </View>
 
             <View style={styles.form}>
-                <SignupForm form={form} setForm={setForm}/>
-                <SignupButton
-                    username={form.username}
+                <LoginForm form={form} setForm={setForm}/>
+                <LoginButton
                     email={form.email}
                     password={form.password}
-                    first_name={form.first_name}
-                    last_name={form.last_name}
-                    nickname={form.nickname}
-                    navigation={navigation}
                 />
             </View>
             <TouchableOpacity
-                style={styles.loginButton}
-                onPress={() => navigation.navigate("login")}
+                style={styles.signUpButton}
+                onPress={() => router.push('/auth/register')}
             >
-                <Text style={styles.loginText}>Already have an account? Log in</Text>
+                <Text style={styles.signUpText}>Don`t have an account? Sign up</Text>
             </TouchableOpacity>
         </SafeAreaView>
     )
 }
 
-export default SignupPage
+export default LoginPage
 
 const styles = StyleSheet.create({
     container: {
@@ -58,17 +48,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#0a0a0a",
     },
-    containerWeb: {
-        padding: 24,
-        flex: 1,
-        backgroundColor: "#0aff0a",
-    },
     header: {
-        marginVertical: 15,
+        marginVertical: 36,
     },
     headerImage: {
-        width: 50,
-        height: 50,
+        width: 80,
+        height: 80,
         alignSelf: "center",
         borderRadius: 20,
         marginBottom: 36,
@@ -91,7 +76,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginBottom: 24,
     },
-    loginButton: {
+    signUpButton: {
         position: "absolute",
         justifyContent: "center",
         alignItems: "center",
@@ -101,9 +86,10 @@ const styles = StyleSheet.create({
         left: 0,
         flex: 1,
     },
-    loginText: {
+    signUpText: {
         fontWeight: "400",
         fontSize: 15,
         color: "#fff",
     },
 })
+

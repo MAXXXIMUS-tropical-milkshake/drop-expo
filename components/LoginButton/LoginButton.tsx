@@ -2,12 +2,10 @@ import React from "react"
 import { TouchableOpacity, View, Text, Alert } from "react-native"
 import styles from "./LoginButtonStyles.tsx"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { NavigationProp, ParamListBase } from "@react-navigation/native"
 
 type LoginProps = {
   email: string
   password: string
-  navigation: NavigationProp<ParamListBase>
 }
 
 function LoginButton(props: LoginProps): React.JSX.Element {
