@@ -39,15 +39,15 @@ export function SessionProvider({ children }: PropsWithChildren) {
         signIn: async (props: LoginRequest): Promise<boolean> => {
           const loginResult : Result<LoginResponse> = await AuthRepository.login(props);
           if (loginResult.success) {
-            setAccessToken((loginResult.data).accessToken);
-            setRefreshToken((loginResult.data).refreshToken);
+            setAccessToken(loginResult.data.accessToken);
+            setRefreshToken(loginResult.data.refreshToken);
             return true;
           }
           return false;
         },
         signOut: () => {
           setAccessToken(null);
-          setRefreshToken(null)
+          setRefreshToken(null);
         },
         accessToken,
         refreshToken,

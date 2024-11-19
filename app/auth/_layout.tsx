@@ -14,7 +14,7 @@ export default function AuthLayout() {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-        }} 
+        }}
       />
       <Stack.Screen 
         name="login" 
