@@ -9,6 +9,7 @@ import {Colors} from '@/constants/Colors';
 import {useColorScheme} from '@/hooks/useColorScheme';
 import BeatUploadScreenHeader from "@/components/BeatUploadScreenHeader.tsx";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { setStorageItemAsync } from '../useStorageState';
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();

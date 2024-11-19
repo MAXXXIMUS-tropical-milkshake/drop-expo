@@ -15,7 +15,7 @@ function SignupPage(): React.JSX.Element {
     })
     const router = useRouter();
     return (
-        <SafeAreaView style={Platform.OS != 'web' ? styles.container : styles.containerWeb}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Image
                     source={require("../../assets/droplogo.png")}
@@ -52,11 +52,6 @@ export default SignupPage
 
 const styles = StyleSheet.create({
     container: {
-        padding: 24,
-        flex: 1,
-        backgroundColor: "#0a0a0a",
-    },
-    containerWeb: {
         padding: 24,
         flex: 1,
         backgroundColor: "#0a0a0a",

@@ -2,17 +2,17 @@ import { Result, ErrorResponse } from './Response'
 
 const baseURL = 'http://localhost:8080'
 
-interface LoginRequest {
+export type LoginRequest = {
     email: string
     password: string
 };
 
-interface LoginResponse {
+export type LoginResponse = {
     refreshToken: string,
     accessToken: string
 };
 
-interface SignupRequest {
+export type SignupRequest = {
     username: string
     email: string
     password: string
@@ -21,7 +21,7 @@ interface SignupRequest {
     nickname: string
 };
 
-interface SignupResponse {
+export type SignupResponse = {
     id: number
     username: string
     email: string
@@ -31,15 +31,15 @@ interface SignupResponse {
     nickname: string
 };
 
-interface VerifyRequest {
+export type VerifyRequest = {
     code: string
 };
 
-interface RefreshTokenRequest {
+export type RefreshTokenRequest = {
     refreshToken: string
 };
 
-interface RefreshTokenResponse {
+export type RefreshTokenResponse = {
     refreshToken: string,
     accessToken: string
 };
@@ -80,14 +80,7 @@ export class AuthRepository {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                username: data.username,
-                first_name: data.first_name,
-                last_name: data.last_name,
-                email: data.email,
-                password: data.password,
-                pseudonym: data.nickname,
-            }),
+            body: JSON.stringify(data),
         });
 
         const payload = await response.json();

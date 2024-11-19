@@ -3,6 +3,7 @@ import { TouchableOpacity, View, Text, Alert } from "react-native"
 import styles from "./LoginButtonStyles.tsx"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { AuthRepository } from "@/repositories/AuthRepository.tsx"
+import { useSession } from "@/app/ctx.tsx"
 
 type LoginProps = {
   email: string
@@ -10,15 +11,14 @@ type LoginProps = {
 }
 
 function LoginButton(props: LoginProps): React.JSX.Element {
+  const { signIn } = useSession();
 
   const onLogin = async () => {
-    const data = await AuthRepository.login(props);
+    const data = await signIn(props);
           
-    if (data.success) {
+    if (data) {
       Alert.alert("Success");
-      await AsyncStorage.setItem("accessToken", data.data.accessToken);
-      await AsyncStorage.setItem("refreshToken", data.data.refreshToken);
-    } else { Alert.alert(data.data.message)
+    } else { Alert.alert("Not success =(");
     }
   };
 
