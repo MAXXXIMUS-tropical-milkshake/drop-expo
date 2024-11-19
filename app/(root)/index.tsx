@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 
 import {
     Dimensions, StyleSheet,
@@ -47,7 +47,7 @@ function Item(it: number): React.JSX.Element {
     );
 }
 
-function HomeScreen(): React.JSX.Element {
+function Index(): React.JSX.Element {
     const it: number[] = [1, 2, 3, 4, 5];
     const ref = React.useRef<ICarouselInstance>(null);
     const animationStyle = React.useCallback(
@@ -93,7 +93,7 @@ function HomeScreen(): React.JSX.Element {
     );
 }
 
-export default HomeScreen
+export default Index
 
 const styles = StyleSheet.create({
     button: {

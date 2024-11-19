@@ -1,14 +1,13 @@
 import React from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {Link} from "expo-router";
+import {Link, router} from "expo-router";
 
 export default function BeatUploadScreenHeader(): React.JSX.Element {
-    return <View>
-        <Link push href="/(tabs)/HomeScreen">
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Back</Text>
-            </TouchableOpacity>
-        </Link>
+    return <View style={{height: 200}}>
+        <TouchableOpacity style={styles.button} onPress={() => router.back()}>
+            <Text style={styles.buttonText}>Back</Text>
+        </TouchableOpacity>
+
     </View>;
 }
 const styles = StyleSheet.create({

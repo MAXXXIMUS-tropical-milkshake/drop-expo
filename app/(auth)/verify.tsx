@@ -3,9 +3,9 @@ import React, {useState} from "react"
 import {View, SafeAreaView, Image, Text, StyleSheet} from "react-native"
 import EmailVerifyForm from "@/components/VerifyForm/VerifyForm.tsx"
 import EmailVerifyButton from "@/components/VerifyButton/VerifyButton.tsx"
-import {PageProp} from "../../components/PageProps.tsx"
+import {PageProp} from "@/components/PageProps.tsx"
 
-function EmailVerifyPage({navigation}: PageProp): React.JSX.Element {
+function Verify({navigation}: PageProp): React.JSX.Element {
     const [form, setForm] = useState({
         code: "",
     })
@@ -32,7 +32,7 @@ function EmailVerifyPage({navigation}: PageProp): React.JSX.Element {
     )
 }
 
-export default EmailVerifyPage;
+export default Verify;
 
 const styles = StyleSheet.create({
     container: {
@@ -84,4 +84,3 @@ const styles = StyleSheet.create({
         color: "#fff",
     },
 })
-

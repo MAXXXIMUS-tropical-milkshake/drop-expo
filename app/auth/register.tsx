@@ -1,3 +1,4 @@
+<<<<<<<< HEAD:app/auth/register.tsx
 import React, {useState} from "react"
 import {View, Image, Text, SafeAreaView, TouchableOpacity, Platform, StyleSheet} from "react-native"
 import SignupForm from "@/components/SignupForm/SignupForm.tsx"
@@ -5,6 +6,17 @@ import SignupButton from "@/components/SignupButton/SignupButton.tsx"
 import { useRouter } from "expo-router"
 
 function SignupPage(): React.JSX.Element {
+========
+import React, {useState} from "react";
+import {View, Image, Text, SafeAreaView, TouchableOpacity, Platform, StyleSheet} from "react-native";
+import SignupForm from "@/components/SignupForm/SignupForm.tsx";
+import SignupButton from "@/components/SignupButton/SignupButton.tsx";
+import {PageProp} from "../../components/PageProps.tsx";
+import {router} from "expo-router";
+
+
+function Signup({navigation}: PageProp): React.JSX.Element {
+>>>>>>>> petrukhin/routing:app/(auth)/signup.tsx
     const [form, setForm] = useState({
         username: "",
         email: "",
@@ -40,7 +52,11 @@ function SignupPage(): React.JSX.Element {
             </View>
             <TouchableOpacity
                 style={styles.loginButton}
+<<<<<<<< HEAD:app/auth/register.tsx
                 onPress={() => router.push("/auth/login")}
+========
+                onPress={() => router.push("/login")}
+>>>>>>>> petrukhin/routing:app/(auth)/signup.tsx
             >
                 <Text style={styles.loginText}>Already have an account? Log in</Text>
             </TouchableOpacity>
@@ -48,14 +64,21 @@ function SignupPage(): React.JSX.Element {
     )
 }
 
-export default SignupPage
-
+export default Signup;
 const styles = StyleSheet.create({
     container: {
         padding: 24,
         flex: 1,
         backgroundColor: "#0a0a0a",
     },
+<<<<<<<< HEAD:app/auth/register.tsx
+========
+    containerWeb: {
+        padding: 24,
+        flex: 1,
+        backgroundColor: "#0a0a0a",
+    },
+>>>>>>>> petrukhin/routing:app/(auth)/signup.tsx
     header: {
         marginVertical: 15,
     },

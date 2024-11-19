@@ -1,13 +1,3 @@
-<<<<<<<< HEAD:app/auth/login.tsx
-import React, {useState} from "react"
-import {View, SafeAreaView, Image, Text, TouchableOpacity, StyleSheet} from "react-native"
-import LoginForm from "@/components/LoginForm/LoginForm.tsx"
-import LoginButton from "@/components/LoginButton/LoginButton.tsx"
-import { useRouter } from "expo-router"
-
-function LoginPage(): React.JSX.Element {
-    const router = useRouter();
-========
 import React, {useState} from "react";
 import {View, SafeAreaView, Image, Text, TouchableOpacity, StyleSheet} from "react-native";
 import LoginForm from "@/components/LoginForm/LoginForm.tsx";
@@ -17,7 +7,6 @@ import Modal from "react-native-modal";
 import {router, Slot} from "expo-router";
 
 function Login({navigation}: PageProp): React.JSX.Element {
->>>>>>>> petrukhin/routing:app/(auth)/login.tsx
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -40,15 +29,12 @@ function Login({navigation}: PageProp): React.JSX.Element {
                 <LoginButton
                     email={form.email}
                     password={form.password}
+                    navigation={navigation}
                 />
             </View>
             <TouchableOpacity
                 style={styles.signUpButton}
-<<<<<<<< HEAD:app/auth/login.tsx
-                onPress={() => router.push('/auth/register')}
-========
                 onPress={() => router.push("/signup")}
->>>>>>>> petrukhin/routing:app/(auth)/login.tsx
             >
                 <Text style={styles.signUpText}>Don`t have an account? Sign up</Text>
             </TouchableOpacity>
@@ -110,4 +96,3 @@ const styles = StyleSheet.create({
         color: "#fff",
     },
 })
-

@@ -9,7 +9,7 @@ const pickDocument = async () => {
         console.log(result.assets?.map((a) => a.name) ?? []);
 };
 
-export default function BeatUploadScreen(): React.JSX.Element {
+export default function Upload(): React.JSX.Element {
     return (
         <View>
             <View style={styles.input}>
