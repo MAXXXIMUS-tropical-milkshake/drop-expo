@@ -90,6 +90,9 @@ const styles = StyleSheet.create({
     form: {
         flex: 1,
         marginBottom: 24,
+        width: "100%",
+        maxWidth: 500,
+        margin: "auto"
     },
     loginButton: {
         position: "absolute",
