@@ -1,13 +1,16 @@
-import React, {useState} from "react"
-// import styles from "./EmailVerifyPageStyles"
-import {View, SafeAreaView, Image, Text, StyleSheet} from "react-native"
-import EmailVerifyForm from "@/components/VerifyForm/VerifyForm.tsx"
-import EmailVerifyButton from "@/components/VerifyButton/VerifyButton.tsx"
-import {PageProp} from "../../components/PageProps.tsx"
+import React, {useState} from "react";
+import {View, SafeAreaView, Image, Text, TouchableOpacity, StyleSheet} from "react-native";
+import LoginForm from "@/components/LoginForm/LoginForm.tsx";
+import LoginButton from "@/components/LoginButton/LoginButton.tsx";
+import {PageProp} from "../../components/PageProps.tsx";
+import Modal from "react-native-modal";
+import {router, Slot} from "expo-router";
+import { SessionProvider } from "../context/AuthContext.tsx";
 
-function EmailVerifyPage({navigation}: PageProp): React.JSX.Element {
+function Login({navigation}: PageProp): React.JSX.Element {
     const [form, setForm] = useState({
-        code: "",
+        email: "",
+        password: "",
     })
     return (
         <SafeAreaView style={styles.container}>
@@ -18,24 +21,33 @@ function EmailVerifyPage({navigation}: PageProp): React.JSX.Element {
                     alt="Logo"
                 />
                 <Text style={styles.title}>
-                    Email verify
+                    Sign in to <Text style={styles.titleDrop}>Drop</Text>
                 </Text>
             </View>
 
             <View style={styles.form}>
-                <EmailVerifyForm form={form} setForm={setForm}/>
-                <EmailVerifyButton
-                    code={form.code}
+                <LoginForm form={form} setForm={setForm}/>
+                <LoginButton
+                    email={form.email}
+                    password={form.password}
                 />
             </View>
+            <TouchableOpacity
+                style={styles.signUpButton}
+                onPress={() => router.push("/signup")}
+            >
+                <Text style={styles.signUpText}>Don`t have an account? Sign up</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
 
-export default EmailVerifyPage;
+export default Login;
 
 const styles = StyleSheet.create({
     container: {
+        height: "100%",
+        width: "100%",
         padding: 24,
         flex: 1,
         backgroundColor: "#0a0a0a",
@@ -84,4 +96,3 @@ const styles = StyleSheet.create({
         color: "#fff",
     },
 })
-

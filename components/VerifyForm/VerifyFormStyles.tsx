@@ -1,27 +1,20 @@
 import { StyleSheet } from "react-native"
 
-export default StyleSheet.create({
-  inputControl: {
-    height: 44,
-    backgroundColor: "#000",
-    color: "#fff",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: "#30303d",
-    fontSize: 15,
-    fontWeight: "500",
+export const styles = StyleSheet.create({
+  inputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 20,
   },
   input: {
-    marginBottom: 8,
+    borderWidth: 1,
+    color: "#fff",
+    borderColor: "#ccc",
+    borderRadius: 5,
+    width: 40,
+    height: 50,
+    textAlign: "center",
+    fontSize: 20,
   },
-  inputLabel: {
-    color: "#ccc",
-    fontSize: 17,
-    fontWeight: "600",
-    marginBottom: 8,
-    marginLeft: 8,
-  },
-})
+});
 

@@ -1,6 +1,8 @@
 import React from "react"
 import styles from "./SignupFormStyles.tsx"
 import { TextInput, View, Text } from "react-native"
+import { useUserContext } from "@/app/context/UserContext.tsx"
+import { ValidationDetails } from "@/repositories/Response.tsx"
 
 type SignupFormProps = {
   form: {
@@ -9,7 +11,7 @@ type SignupFormProps = {
     password: string
     first_name: string
     last_name: string
-    nickname: string
+    pseudonym: string
   }
   setForm: React.Dispatch<
     React.SetStateAction<{
@@ -18,12 +20,14 @@ type SignupFormProps = {
       password: string
       first_name: string
       last_name: string
-      nickname: string
+      pseudonym: string
     }>
   >
 }
 
 function SignupForm(props: SignupFormProps): React.JSX.Element {
+  const { validationDetails } = useUserContext();
+
   return (
     <View>
       <View style={styles.input}>
@@ -33,7 +37,8 @@ function SignupForm(props: SignupFormProps): React.JSX.Element {
           autoCorrect={false}
           placeholder="user123"
           placeholderTextColor="#6b7280"
-          style={styles.inputControl}
+          style={[styles.inputControl,
+          (validationDetails !== null && validationDetails.violations.find((item) => item.subject === "username") !== undefined) ? {borderBottomColor: "red"} : null]}
           value={props.form.username}
           onChangeText={(username: string) =>
             props.setForm({ ...props.form, username })
@@ -48,7 +53,8 @@ function SignupForm(props: SignupFormProps): React.JSX.Element {
           keyboardType="email-address"
           placeholder="qwerty@example.com"
           placeholderTextColor="#6b7280"
-          style={styles.inputControl}
+          style={[styles.inputControl,
+          (validationDetails !== null && validationDetails.violations.find((item) => item.subject === "email") !== undefined) ? {borderBottomColor: "red"} : null]}
           value={props.form.email}
           onChangeText={(email: string) =>
             props.setForm({ ...props.form, email })
@@ -62,7 +68,9 @@ function SignupForm(props: SignupFormProps): React.JSX.Element {
           autoCorrect={false}
           placeholder="Maksim"
           placeholderTextColor="#6b7280"
-          style={styles.inputControl}
+          style={[styles.inputControl,
+            (validationDetails !== null && validationDetails.violations.find((item) => item.subject === "first_name") !== undefined) ? {borderBottomColor: "red"} : null
+          ]}
           value={props.form.first_name}
           onChangeText={(first_name: string) =>
             props.setForm({ ...props.form, first_name })
@@ -76,7 +84,9 @@ function SignupForm(props: SignupFormProps): React.JSX.Element {
           autoCorrect={false}
           placeholder="Ivanov"
           placeholderTextColor="#6b7280"
-          style={styles.inputControl}
+          style={[styles.inputControl, 
+            (validationDetails !== null && validationDetails.violations.find((item) => item.subject === "last_name") !== undefined) ? {borderBottomColor: "red"} : null
+          ]}
           value={props.form.last_name}
           onChangeText={(last_name: string) =>
             props.setForm({ ...props.form, last_name })
@@ -84,16 +94,18 @@ function SignupForm(props: SignupFormProps): React.JSX.Element {
         />
       </View>
       <View style={styles.input}>
-        <Text style={styles.inputLabel}>Nickname</Text>
+        <Text style={styles.inputLabel}>Pseudonym</Text>
         <TextInput
           autoCapitalize="none"
           autoCorrect={false}
           placeholder="Super_max228"
           placeholderTextColor="#6b7280"
-          style={styles.inputControl}
-          value={props.form.nickname}
-          onChangeText={(nickname: string) =>
-            props.setForm({ ...props.form, nickname })
+          style={[styles.inputControl,
+            (validationDetails !== null && validationDetails.violations.find((item) => item.subject === "pseudonym") !== undefined) ? {borderBottomColor: "red"} : null
+          ]}
+          value={props.form.pseudonym}
+          onChangeText={(pseudonym: string) =>
+            props.setForm({ ...props.form, pseudonym })
           }
         />
       </View>
@@ -103,7 +115,9 @@ function SignupForm(props: SignupFormProps): React.JSX.Element {
           secureTextEntry
           placeholder="*********"
           placeholderTextColor="#6b7280"
-          style={styles.inputControl}
+          style={[styles.inputControl, 
+            (validationDetails !== null && validationDetails.violations.find((item) => item.subject === "password") !== undefined) ? {borderBottomColor: "red"} : null
+          ]}
           value={props.form.password}
           onChangeText={(password: string) =>
             props.setForm({ ...props.form, password })

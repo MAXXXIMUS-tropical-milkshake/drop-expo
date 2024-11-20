@@ -19,6 +19,6 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     color: "#fff",
-  },
+  }
 })
 

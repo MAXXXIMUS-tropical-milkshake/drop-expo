@@ -1,47 +1,55 @@
-import { Result, ErrorResponse } from './Response'
+import { Result } from './Response'
 
 const baseURL = 'http://localhost:8080'
 
-interface LoginRequest {
+export type LoginRequest = {
     email: string
     password: string
 };
 
-interface LoginResponse {
+export type LoginResponse = {
     refreshToken: string,
     accessToken: string
 };
 
-interface SignupRequest {
+export type SignupRequest = {
     username: string
-    email: string
+    email: {
+        email: string
+        code: string
+    }
     password: string
     first_name: string
     last_name: string
-    nickname: string
+    pseudonym: string
 };
 
-interface SignupResponse {
+export type SignupResponse = {
     id: number
     username: string
     email: string
     password: string
     first_name: string
     last_name: string
-    nickname: string
+    pseudonym: string
 };
 
-interface VerifyRequest {
+export type VerifyRequest = {
     code: string
 };
 
-interface RefreshTokenRequest {
+export type RefreshTokenRequest = {
     refreshToken: string
 };
 
-interface RefreshTokenResponse {
+export type RefreshTokenResponse = {
     refreshToken: string,
     accessToken: string
+};
+
+export type SendEmailRequest = {
+    is_verified: boolean
+    email: string
 };
 
 export class AuthRepository {
@@ -80,14 +88,7 @@ export class AuthRepository {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                username: data.username,
-                first_name: data.first_name,
-                last_name: data.last_name,
-                email: data.email,
-                password: data.password,
-                pseudonym: data.nickname,
-            }),
+            body: JSON.stringify(data),
         });
 
         const payload = await response.json();
@@ -163,4 +164,33 @@ export class AuthRepository {
         };
     };
 
+    static async sendEmail(data: SendEmailRequest): Promise<Result<void>> {
+        console.log(data);
+
+
+        const queryParams = new URLSearchParams(data as any).toString();
+
+        const response = await fetch(`${baseURL}/v1/auth/email/send?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            return {
+                success: true,
+                data: undefined
+            };
+        }
+
+        const payload = await response.json();
+        return {
+            success: false,
+            data: {
+                ...payload,
+                status: response.status
+            }
+        };
+    };
 };

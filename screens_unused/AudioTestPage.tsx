@@ -1,5 +1,4 @@
 import TrackPlayer, { Track } from "react-native-track-player"
-// import styles from "./AudioTestPageStyles"
 import React from "react"
 import {View, SafeAreaView, Text, TouchableOpacity, StyleSheet} from "react-native"
 import { Platform } from "react-native"
@@ -14,10 +13,10 @@ const apiUrl: string =
     : "http://10.0.2.2:9321/v1/"
 
 function AudioTestPage(): React.JSX.Element {
-  const [playing, setPlaying] = useState(false)
+  const [playing, setPlaying] = useState(false);
   const [form, setForm] = useState({
     id: "",
-  })
+  });
   const addTrack = async (id: string = "-1") => {
     let accessToken : string = await AsyncStorage.getItem('accessToken') as string;
     if (id == "-1") {
@@ -81,7 +80,7 @@ function AudioTestPage(): React.JSX.Element {
             style={styles.button}
             onPress={() => handlePlay()}
           >
-            <Text>Play</Text>
+            <Text>{!playing ? "Play" : "Pause"}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}

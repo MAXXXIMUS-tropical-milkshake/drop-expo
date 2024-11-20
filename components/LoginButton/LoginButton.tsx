@@ -2,37 +2,36 @@ import React from "react"
 import { TouchableOpacity, View, Text, Alert } from "react-native"
 import styles from "./LoginButtonStyles.tsx"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import { AuthRepository } from "@/repositories/AuthRepository.tsx"
+import { SessionProvider, useSession } from "@/app/context/AuthContext.tsx"
+import { router } from "expo-router"
 
 type LoginProps = {
   email: string
   password: string
-  navigation: NavigationProp<ParamListBase>
 }
 
 function LoginButton(props: LoginProps): React.JSX.Element {
+  const { signIn } = useSession();
 
   const onLogin = async () => {
-    const data = await AuthRepository.login(props);
+    const data = await signIn(props);
           
-    if (data.success) {
-      Alert.alert("Success");
-      await AsyncStorage.setItem("accessToken", data.data.accessToken);
-      await AsyncStorage.setItem("refreshToken", data.data.refreshToken);
+    if (data) {
+      router.push("/")
     } else {
-      Alert.alert(data.data.message)
+      Alert.alert("Not success =(");
     }
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onLogin}>
-        <View style={styles.button}>
-          <Text style={styles.buttonText}>Sign in</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={onLogin}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Sign in</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
   )
 }
 

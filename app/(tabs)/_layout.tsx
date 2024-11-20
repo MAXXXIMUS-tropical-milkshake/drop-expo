@@ -7,6 +7,9 @@ import {IconSymbol} from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import {Colors} from '@/constants/Colors';
 import {useColorScheme} from '@/hooks/useColorScheme';
+import BeatUploadScreenHeader from "@/components/BeatUploadScreenHeader.tsx";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { setStorageItemAsync } from '../useStorageState';
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
@@ -20,7 +23,6 @@ export default function TabLayout() {
                 tabBarBackground: TabBarBackground,
                 tabBarStyle: Platform.select({
                     ios: {
-                        // Use a transparent background on iOS to show the blur effect
                         position: 'absolute',
                     },
                     default: {},
@@ -42,7 +44,15 @@ export default function TabLayout() {
                     header: () => HomeScreenHeader({visible: filtersModalVisible, setVisible: setFiltersModalVisible}),
                 }}
             />
-
+            <Tabs.Screen
+                name="BeatUploadScreen"
+                options={{
+                    title: 'Upload',
+                    tabBarIcon: ({color}) => <IconSymbol size={28} name="doc.fill.badge.ellipsis" color={color}/>,
+                    headerShown: true,
+                    header: () => BeatUploadScreenHeader()
+                }}
+            />
         </Tabs>
     );
 }
