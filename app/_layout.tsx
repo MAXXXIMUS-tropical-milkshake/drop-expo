@@ -5,6 +5,8 @@ import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {useColorScheme} from "@/hooks/useColorScheme.ts";
 import {useFonts} from "expo-font";
 import {useEffect} from "react";
+import { SessionProvider } from './context/AuthContext';
+import { UserProvider } from './context/UserContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,7 +27,9 @@ export default function RootLayout() {
     }
     return (
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <Slot/>
+            <UserProvider><SessionProvider>
+                <Slot/>
+            </SessionProvider></UserProvider>
         </ThemeProvider>
     );
 }

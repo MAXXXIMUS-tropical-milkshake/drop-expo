@@ -4,11 +4,28 @@ import {View, SafeAreaView, Image, Text, StyleSheet} from "react-native"
 import EmailVerifyForm from "@/components/VerifyForm/VerifyForm.tsx"
 import EmailVerifyButton from "@/components/VerifyButton/VerifyButton.tsx"
 import {PageProp} from "@/components/PageProps.tsx"
+import { TouchableOpacity } from "react-native"
+import { AuthRepository } from "@/repositories/AuthRepository"
+import { useLocalSearchParams } from "expo-router"
+import { UserProvider } from "../context/UserContext"
 
-function Verify({navigation}: PageProp): React.JSX.Element {
+function Verify({navigation}: {navigation: PageProp}): React.JSX.Element {
     const [form, setForm] = useState({
         code: "",
     })
+
+    const { email } = useLocalSearchParams()
+
+    const [isValid, setIsValid] = useState(true);
+
+    const onSendEmail = async () => {
+        const data = await AuthRepository.sendEmail({is_verified: false, email: email as string});
+
+        if (data.success) {
+            console.log("email was sent successfully");
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -22,12 +39,23 @@ function Verify({navigation}: PageProp): React.JSX.Element {
                 </Text>
             </View>
 
+            {isValid ? null : <Text style={styles.errorText}>Invalid code</Text>}
+
             <View style={styles.form}>
                 <EmailVerifyForm form={form} setForm={setForm}/>
                 <EmailVerifyButton
-                    code={form.code}
+                    props={{code: form.code}}
+                    setIsValid={setIsValid}
+                    isValid={isValid}
                 />
             </View>
+
+            <TouchableOpacity
+                style={styles.resendButton}
+                onPress={onSendEmail}
+            >
+                <Text style={styles.resendText}>Send again</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
@@ -68,6 +96,21 @@ const styles = StyleSheet.create({
         flex: 1,
         marginBottom: 24,
     },
+    resendText: {
+        fontWeight: "400",
+        fontSize: 15,
+        color: "#fff"
+    },
+    resendButton: {
+        position: "absolute",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        flex: 1,
+    },
     signUpButton: {
         position: "absolute",
         justifyContent: "center",
@@ -83,4 +126,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: "#fff",
     },
+    errorText: {
+        color: "red",
+        textAlign: "center",
+        marginBottom: 10,
+        fontSize: 15,
+    }
 })

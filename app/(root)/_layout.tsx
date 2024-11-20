@@ -9,13 +9,18 @@ import {Colors} from '@/constants/Colors.ts';
 import {useColorScheme} from '@/hooks/useColorScheme.ts';
 import BeatUploadScreenHeader from "@/components/BeatUploadScreenHeader.tsx";
 import HomeScreen from "@/screens_unused";
+import { useSession } from '../context/AuthContext';
 
 export default function RootLayout() {
     const colorScheme = useColorScheme();
     const [filtersModalVisible, setFiltersModalVisible] = useState(false);
-    if (false) {
+
+    const { refreshToken } = useSession();
+
+    if (!refreshToken) {
         return <Redirect href="/signup"/>;
     }
+
     return (
         <Tabs
             screenOptions={{

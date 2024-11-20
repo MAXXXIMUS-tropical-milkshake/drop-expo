@@ -5,6 +5,7 @@ import LoginButton from "@/components/LoginButton/LoginButton.tsx";
 import {PageProp} from "../../components/PageProps.tsx";
 import Modal from "react-native-modal";
 import {router, Slot} from "expo-router";
+import { SessionProvider } from "../context/AuthContext.tsx";
 
 function Login({navigation}: PageProp): React.JSX.Element {
     const [form, setForm] = useState({
@@ -29,7 +30,6 @@ function Login({navigation}: PageProp): React.JSX.Element {
                 <LoginButton
                     email={form.email}
                     password={form.password}
-                    navigation={navigation}
                 />
             </View>
             <TouchableOpacity

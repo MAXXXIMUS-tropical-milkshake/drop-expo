@@ -4,6 +4,7 @@ import SignupForm from "@/components/SignupForm/SignupForm.tsx";
 import SignupButton from "@/components/SignupButton/SignupButton.tsx";
 import {PageProp} from "../../components/PageProps.tsx";
 import {router} from "expo-router";
+import { UserProvider } from "../context/UserContext"
 
 
 function Signup({navigation}: PageProp): React.JSX.Element {
@@ -11,7 +12,7 @@ function Signup({navigation}: PageProp): React.JSX.Element {
         username: "",
         email: "",
         password: "",
-        nickname: "",
+        pseudonym: "",
         first_name: "",
         last_name: "",
     })
@@ -32,12 +33,11 @@ function Signup({navigation}: PageProp): React.JSX.Element {
                 <SignupForm form={form} setForm={setForm}/>
                 <SignupButton
                     username={form.username}
-                    email={form.email}
+                    email={{email: form.email, code: ""}}
                     password={form.password}
                     first_name={form.first_name}
                     last_name={form.last_name}
-                    nickname={form.nickname}
-                    navigation={navigation}
+                    pseudonym={form.pseudonym}
                 />
             </View>
             <TouchableOpacity

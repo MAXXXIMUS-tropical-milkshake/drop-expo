@@ -1,4 +1,4 @@
-import { Result, ErrorResponse } from './Response'
+import { Result } from './Response'
 
 const baseURL = 'http://localhost:8080'
 
@@ -14,11 +14,14 @@ export type LoginResponse = {
 
 export type SignupRequest = {
     username: string
-    email: string
+    email: {
+        email: string
+        code: string
+    }
     password: string
     first_name: string
     last_name: string
-    nickname: string
+    pseudonym: string
 };
 
 export type SignupResponse = {
@@ -28,7 +31,7 @@ export type SignupResponse = {
     password: string
     first_name: string
     last_name: string
-    nickname: string
+    pseudonym: string
 };
 
 export type VerifyRequest = {
@@ -42,6 +45,11 @@ export type RefreshTokenRequest = {
 export type RefreshTokenResponse = {
     refreshToken: string,
     accessToken: string
+};
+
+export type SendEmailRequest = {
+    is_verified: boolean
+    email: string
 };
 
 export class AuthRepository {
@@ -156,4 +164,33 @@ export class AuthRepository {
         };
     };
 
+    static async sendEmail(data: SendEmailRequest): Promise<Result<void>> {
+        console.log(data);
+
+
+        const queryParams = new URLSearchParams(data as any).toString();
+
+        const response = await fetch(`${baseURL}/v1/auth/email/send?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            return {
+                success: true,
+                data: undefined
+            };
+        }
+
+        const payload = await response.json();
+        return {
+            success: false,
+            data: {
+                ...payload,
+                status: response.status
+            }
+        };
+    };
 };

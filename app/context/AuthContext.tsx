@@ -1,5 +1,5 @@
 import { useContext, createContext, type PropsWithChildren } from 'react';
-import { useStorageState } from './useStorageState';
+import { useStorageState } from '../useStorageState';
 import { LoginRequest, LoginResponse, AuthRepository } from '@/repositories/AuthRepository'
 import { Result } from '@/repositories/Response';
 
@@ -37,7 +37,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
     <AuthContext.Provider
       value={{
         signIn: async (props: LoginRequest): Promise<boolean> => {
-          const loginResult : Result<LoginResponse> = await AuthRepository.login(props);
+          const loginResult = await AuthRepository.login(props);
+
           if (loginResult.success) {
             setAccessToken(loginResult.data.accessToken);
             setRefreshToken(loginResult.data.refreshToken);

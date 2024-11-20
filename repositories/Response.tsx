@@ -5,3 +5,9 @@ export type ErrorResponse = {
     message: string,
     details: any
 };
+
+export type ValidationDetails = {
+    violations: {
+        subject: string,
+    }[]
+};
