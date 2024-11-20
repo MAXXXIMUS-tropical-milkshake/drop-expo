@@ -33,6 +33,7 @@ function VerifyButton({props, setIsValid, isValid}: {props: VerifyProps, setIsVa
       }
       router.back();
     } else if (data.data.status === 401) {
+      console.log(data.data.status);
       curIsValid = false;
     } else if (data.data.status === 409) {
       router.back();
@@ -41,7 +42,7 @@ function VerifyButton({props, setIsValid, isValid}: {props: VerifyProps, setIsVa
     }
 
     if (isValid !== curIsValid) {
-      setIsValid(isValid);
+      setIsValid(curIsValid);
     }
   };
 
