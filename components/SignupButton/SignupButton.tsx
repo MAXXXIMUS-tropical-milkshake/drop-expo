@@ -18,11 +18,12 @@ type SignupProps = {
 }
 
 function SignupButton(props: SignupProps): React.JSX.Element {
-  const { setUser } = useUserContext();
+  const { setUser, setValidationDetails } = useUserContext();
 
   const onSignup = async () => {
     const data = await AuthRepository.sendEmail({email: props.email.email, is_verified: false});
 
+    setValidationDetails(null);
     if (data.success) {
       console.log(props);
       setUser(props);

@@ -5,9 +5,9 @@ import { ValidationDetails } from '@/repositories/Response';
 
 const UserContext = createContext<{
   user: SignupRequest | null;
-  setUser: (user: SignupRequest) => void;
+  setUser: (user: SignupRequest | null) => void;
   validationDetails: ValidationDetails | null;
-  setValidationDetails: (validationDetails: ValidationDetails) => void;
+  setValidationDetails: (validationDetails: ValidationDetails | null) => void;
 }>({
   user: null,
   setUser: () => null,
