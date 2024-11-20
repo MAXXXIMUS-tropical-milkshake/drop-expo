@@ -17,7 +17,7 @@ export default function HomeScreenHeader(modalProps: FiltersModalProps): React.J
                 <Text style={styles.buttonText}>Filters</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={() => router.push("/(auth)/(root)/upload")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.push("/(root)/upload")}>
                 <Text style={styles.buttonText}>Upload beat</Text>
             </TouchableOpacity>
             <FiltersModal visible={modalProps.visible} setVisible={modalProps.setVisible}/>
