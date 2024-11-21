@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Text, TextInput, TouchableOpacity, View} from "react-native";
 import styles from "@/components/LoginForm/LoginFormStyles.tsx";
 import * as DocumentPicker from "expo-document-picker";
 

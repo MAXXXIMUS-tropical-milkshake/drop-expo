@@ -2,12 +2,9 @@ import React, {useState} from "react";
 import {View, SafeAreaView, Image, Text, TouchableOpacity, StyleSheet} from "react-native";
 import LoginForm from "@/components/LoginForm/LoginForm.tsx";
 import LoginButton from "@/components/LoginButton/LoginButton.tsx";
-import {PageProp} from "../../components/PageProps.tsx";
-import Modal from "react-native-modal";
-import {router, Slot} from "expo-router";
-import { SessionProvider } from "../context/AuthContext.tsx";
+import {router} from "expo-router";
 
-function Login({navigation}: PageProp): React.JSX.Element {
+function Login(): React.JSX.Element {
     const [form, setForm] = useState({
         email: "",
         password: "",

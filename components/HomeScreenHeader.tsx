@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React from "react";
 import {Dimensions, Text, TouchableOpacity, View, StyleSheet} from "react-native";
 import FiltersModal, {FiltersModalProps} from "@/components/FiltersModal.tsx";
-import {Link, router} from "expo-router";
+import {router} from "expo-router";
 
 
 export default function HomeScreenHeader(modalProps: FiltersModalProps): React.JSX.Element {
