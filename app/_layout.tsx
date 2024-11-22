@@ -5,8 +5,11 @@ import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {useColorScheme} from "@/hooks/useColorScheme.ts";
 import {useFonts} from "expo-font";
 import {useEffect} from "react";
-import {SessionProvider} from './context/AuthContext';
-import {UserProvider} from './context/UserContext';
+import {SessionProvider} from '@/contexts/AuthContext';
+import {UserProvider} from '@/contexts/UserContext';
+import {enableExperimentalWebImplementation} from "react-native-gesture-handler";
+
+enableExperimentalWebImplementation(true);
 
 SplashScreen.preventAutoHideAsync();
 
