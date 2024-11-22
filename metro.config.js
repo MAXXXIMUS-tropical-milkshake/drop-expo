@@ -4,6 +4,7 @@ const {getDefaultConfig} = require('expo/metro-config');
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
 const path = require('path');
+config.resolver.assetExts.push("cjs");
 
 config.resolver.resolveRequest = (context, realModuleName, platform) => {
     if (realModuleName === 'react-native-reanimated-carousel') {

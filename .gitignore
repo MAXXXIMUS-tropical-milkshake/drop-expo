@@ -39,3 +39,9 @@ app-example
 
 # webstorm
 .idea
+
+# firebase
+
+.firebaserc
+.firebase
+firebase.json

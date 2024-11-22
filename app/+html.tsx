@@ -13,6 +13,8 @@ export default function HtmlRoot({children}: PropsWithChildren) {
             <link rel="manifest" href="/manifest.json"/>
             <meta name="apple-mobile-web-app-capable" content="yes"/>
             <meta name="mobile-web-app-capable" content="yes"/>
+            <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
             <ScrollViewStyleReset/>
         </head>
         <body>{children}</body>
