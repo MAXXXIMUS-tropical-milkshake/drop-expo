@@ -1,0 +1,15 @@
+{
+  "short_name": "Drop",
+  "name": "Drop mne v rot",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "90x93"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

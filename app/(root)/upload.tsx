@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Text, TextInput, TouchableOpacity, View} from "react-native";
 import styles from "@/components/LoginForm/LoginFormStyles.tsx";
 import * as DocumentPicker from "expo-document-picker";
 
@@ -9,7 +9,7 @@ const pickDocument = async () => {
         console.log(result.assets?.map((a) => a.name) ?? []);
 };
 
-export default function BeatUploadScreen(): React.JSX.Element {
+export default function Upload(): React.JSX.Element {
     return (
         <View>
             <View style={styles.input}>

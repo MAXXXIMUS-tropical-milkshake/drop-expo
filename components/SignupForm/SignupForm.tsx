@@ -1,27 +1,27 @@
-import React from "react"
-import styles from "./SignupFormStyles.tsx"
-import { TextInput, View, Text } from "react-native"
+import React from "react";
+import styles from "./SignupFormStyles.tsx";
+import { TextInput, View, Text } from "react-native";
 
 type SignupFormProps = {
   form: {
-    username: string
-    email: string
-    password: string
-    first_name: string
-    last_name: string
-    nickname: string
-  }
+    username: string;
+    email: string;
+    password: string;
+    first_name: string;
+    last_name: string;
+    pseudonym: string;
+  };
   setForm: React.Dispatch<
     React.SetStateAction<{
-      username: string
-      email: string
-      password: string
-      first_name: string
-      last_name: string
-      nickname: string
+      username: string;
+      email: string;
+      password: string;
+      first_name: string;
+      last_name: string;
+      pseudonym: string;
     }>
-  >
-}
+  >;
+};
 
 function SignupForm(props: SignupFormProps): React.JSX.Element {
   return (
@@ -84,16 +84,16 @@ function SignupForm(props: SignupFormProps): React.JSX.Element {
         />
       </View>
       <View style={styles.input}>
-        <Text style={styles.inputLabel}>Nickname</Text>
+        <Text style={styles.inputLabel}>Pseudonym</Text>
         <TextInput
           autoCapitalize="none"
           autoCorrect={false}
           placeholder="Super_max228"
           placeholderTextColor="#6b7280"
           style={styles.inputControl}
-          value={props.form.nickname}
-          onChangeText={(nickname: string) =>
-            props.setForm({ ...props.form, nickname })
+          value={props.form.pseudonym}
+          onChangeText={(pseudonym: string) =>
+            props.setForm({ ...props.form, pseudonym })
           }
         />
       </View>
@@ -111,7 +111,7 @@ function SignupForm(props: SignupFormProps): React.JSX.Element {
         />
       </View>
     </View>
-  )
+  );
 }
 
-export default SignupForm
+export default SignupForm;
