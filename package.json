@@ -62,7 +62,10 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.2",
     "shaka-player": "^4.12.0",
-    "vite": "^5.4.11"
+
+    "expo-document-picker": "~13.0.1",
+    "expo-secure-store": "~14.0.0",
+    "expo-audio": "~0.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
