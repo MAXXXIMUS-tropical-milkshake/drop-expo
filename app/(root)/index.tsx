@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Alert,
@@ -26,7 +26,7 @@ const aspectRatio = 2 / 3;
 const w = Dimensions.get("window").width;
 const h = Dimensions.get("window").height;
 
-function Item(it: number, player: AudioPlayer): React.JSX.Element {
+function Item(it: number, isPaused: boolean, setIsPaused: (isPaused: boolean) => void): React.JSX.Element {
   return (
     <Animated.View
       style={{
@@ -55,9 +55,8 @@ function Item(it: number, player: AudioPlayer): React.JSX.Element {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              console.log("handle play");
-              if (player.paused) player.play();
-              else player.pause();
+              if (isPaused) setIsPaused(false);
+              else setIsPaused(true);
             }}
           >
             <Text>{it.toString()}</Text>
@@ -69,7 +68,7 @@ function Item(it: number, player: AudioPlayer): React.JSX.Element {
 }
 
 function Index(): React.JSX.Element {
-  const it = [1, 2, 3, 4, 5];
+  const [it, setIt] = useState([1, 2, 3, 4, 5]);
 
   const ref = React.useRef<ICarouselInstance>(null);
   const animationStyle = React.useCallback((value: number) => {
@@ -83,15 +82,37 @@ function Index(): React.JSX.Element {
     };
   }, []);
 
+  const player = useAudioPlayer(null);
+
   const [[, accessToken], setAccessToken] = useStorageState("accessToken");
   const [[, refreshToken], setRefreshToken] = useStorageState("refreshToken");
 
-  const player = useAudioPlayer(null);
+  const [trackID, setTrackID] = React.useState<string | null>(null);
+  const [curIndex, setCurIndex] = React.useState<number | null>(null);
+  useEffect(() => {
+    const play = async () => {
+      if (!trackID) await onSnapToItem(0);
+      player?.pause();
+      player?.replace({uri: `http://localhost:8083/v1/audio/${trackID}/stream`});
+      player?.play();
+      console.log("playing");
+    };
+
+    play();
+  }, [curIndex, accessToken, refreshToken]);
+
+  const [isPaused, setIsPaused] = React.useState(true);
+  useEffect(() => {
+    if (isPaused) player?.pause();
+    else player?.play();
+  }, [isPaused])
 
   const onSnapToItem = async (index: number) => {
     if (!accessToken || !refreshToken) {
       return;
     }
+
+    if (index === it.length - 1) setIt([...it, it.length + 1]);
 
     const data = await Middleware.withRefreshToken(
       {
@@ -103,10 +124,9 @@ function Index(): React.JSX.Element {
       AudioRepository.feed,
     );
     if (data.success) {
-      player.pause();
-      player.replace(`http://localhost:8081/v1/audio/${data.data.id}/stream`);
-      player.play();
-      console.log("playing");
+      setTrackID(data.data.id);
+      setCurIndex(index);
+      setIsPaused(false);
     } else if (data.data.status === 401) {
       router.push("/(auth)/login");
     } else {
@@ -144,14 +164,14 @@ function Index(): React.JSX.Element {
           pagingEnabled={true}
           mode="parallax"
           overscrollEnabled={false}
-          loop={true}
+          loop={false}
           modeConfig={{
             parallaxScrollingOffset: 50,
           }}
           vertical={true}
           onSnapToItem={onSnapToItem}
           renderItem={({ item }) => {
-            return Item(item, player);
+            return Item(item, isPaused, setIsPaused);
           }}
         />
       </SafeAreaView>
