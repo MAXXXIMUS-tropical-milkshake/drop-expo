@@ -15,18 +15,19 @@ import Carousel from "react-native-reanimated-carousel";
 import { ICarouselInstance } from "react-native-reanimated-carousel";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { interpolate } from "react-native-reanimated";
-import { AudioRepository } from "@/repositories/AudioRepository";
-import { AudioPlayer, useAudioPlayer } from "expo-audio";
+import { AudioRepository, FeedResponse } from "@/repositories/AudioRepository";
+import { useAudioPlayer } from "expo-audio";
 import { Middleware } from "@/repositories/Middleware";
 import { useStorageState } from "@/hooks/useStorageState.tsx";
 import { router } from "expo-router";
+import { Result } from "@/repositories/Response";
 
 const sh = Dimensions.get("window").height * 0.5;
 const aspectRatio = 2 / 3;
 const w = Dimensions.get("window").width;
 const h = Dimensions.get("window").height;
 
-function Item(it: number, isPaused: boolean, setIsPaused: (isPaused: boolean) => void): React.JSX.Element {
+function Item(it: number, {id}: {id: string}, isPaused: boolean, setIsPaused: (isPaused: boolean) => void): React.JSX.Element {
   return (
     <Animated.View
       style={{
@@ -51,7 +52,7 @@ function Item(it: number, isPaused: boolean, setIsPaused: (isPaused: boolean) =>
         }}
       >
         <View>
-          <TrackForm form={{ id: "" }} setForm={() => {}}></TrackForm>
+          <TrackForm form={{ id: id }} setForm={() => {}}></TrackForm>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -67,8 +68,15 @@ function Item(it: number, isPaused: boolean, setIsPaused: (isPaused: boolean) =>
   );
 }
 
+type Card = {
+  index: number;
+  id: string;
+  name: string;
+  artist: string;
+};
+
 function Index(): React.JSX.Element {
-  const [it, setIt] = useState([1, 2, 3, 4, 5]);
+  const [it, setIt] = useState<Card[]>([]);
 
   const ref = React.useRef<ICarouselInstance>(null);
   const animationStyle = React.useCallback((value: number) => {
@@ -84,22 +92,61 @@ function Index(): React.JSX.Element {
 
   const player = useAudioPlayer(null);
 
-  const [[, accessToken], setAccessToken] = useStorageState("accessToken");
-  const [[, refreshToken], setRefreshToken] = useStorageState("refreshToken");
+  const [[isAccessTokenLoading, accessToken], setAccessToken] = useStorageState("accessToken");
+  const [[isRefreshTokenLoading, refreshToken], setRefreshToken] = useStorageState("refreshToken");
 
   const [trackID, setTrackID] = React.useState<string | null>(null);
   const [curIndex, setCurIndex] = React.useState<number | null>(null);
+
+  useEffect(() => {
+    if (!accessToken || !refreshToken) return;
+
+    const preload = async () => {
+      const card1 = await Middleware.withRefreshToken(
+        {
+          accessToken: accessToken,
+          setAccessToken: setAccessToken,
+          refreshToken: refreshToken,
+          setRefreshToken: setRefreshToken,
+        },
+        AudioRepository.feed,
+      );
+      const card2 = await Middleware.withRefreshToken(
+        {
+          accessToken: accessToken,
+          setAccessToken: setAccessToken,
+          refreshToken: refreshToken,
+          setRefreshToken: setRefreshToken,
+        },
+        AudioRepository.feed,
+      );
+
+      if (card1.success && card2.success) {
+        setTrackID(card1.data.id);
+        setIsPaused(false);
+        setCurIndex(0);
+        setIt([{index: 0, id: card1.data.id, name: card1.data.name, artist: card1.data.beatmaker.pseudonym}, {index: 1, id: card2.data.id, name: card2.data.name, artist: card2.data.beatmaker.pseudonym}]);
+        return;
+      }
+
+      setCurIndex(null);
+      router.push("/(auth)/login");
+    };
+
+    preload().catch((e) => console.error(e));
+  }, [isAccessTokenLoading, isRefreshTokenLoading]);
+
   useEffect(() => {
     const play = async () => {
-      if (!trackID) await onSnapToItem(0);
+      if (!trackID) return;
       player?.pause();
       player?.replace({uri: `http://localhost:8083/v1/audio/${trackID}/stream`});
       player?.play();
       console.log("playing");
     };
 
-    play();
-  }, [curIndex, accessToken, refreshToken]);
+    play().catch((e) => console.error(e));
+  }, [curIndex, isAccessTokenLoading, isRefreshTokenLoading]);
 
   const [isPaused, setIsPaused] = React.useState(true);
   useEffect(() => {
@@ -112,25 +159,26 @@ function Index(): React.JSX.Element {
       return;
     }
 
-    if (index === it.length - 1) setIt([...it, it.length + 1]);
-
-    const data = await Middleware.withRefreshToken(
-      {
-        accessToken: accessToken,
-        setAccessToken: setAccessToken,
-        refreshToken: refreshToken,
-        setRefreshToken: setRefreshToken,
-      },
-      AudioRepository.feed,
-    );
-    if (data.success) {
-      setTrackID(data.data.id);
-      setCurIndex(index);
-      setIsPaused(false);
-    } else if (data.data.status === 401) {
-      router.push("/(auth)/login");
-    } else {
-      Alert.alert(data.data.message);
+    setTrackID(it[index].id);
+    setCurIndex(index);
+    setIsPaused(false);
+    if (index === it.length - 1) {
+      const data = await Middleware.withRefreshToken(
+        {
+          accessToken: accessToken,
+          setAccessToken: setAccessToken,
+          refreshToken: refreshToken,
+          setRefreshToken: setRefreshToken,
+        },
+        AudioRepository.feed,
+      );
+      if (data.success)
+        setIt((prev) => [...prev, {index: it.length, id: data.data.id, name: data.data.name, artist: data.data.beatmaker.pseudonym}]);
+      else if (data.data.status === 401) {
+        setCurIndex(null);
+        router.push("/(auth)/login");
+      } else
+        Alert.alert(data.data.message);
     }
   };
 
@@ -171,7 +219,7 @@ function Index(): React.JSX.Element {
           vertical={true}
           onSnapToItem={onSnapToItem}
           renderItem={({ item }) => {
-            return Item(item, isPaused, setIsPaused);
+            return Item(item.index, {id: item.id}, isPaused, setIsPaused);
           }}
         />
       </SafeAreaView>
