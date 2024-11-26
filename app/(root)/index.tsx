@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-
+import { Platform } from "react-native";
 import {
   Alert,
   Dimensions,
@@ -19,7 +19,7 @@ import { AudioRepository } from "@/repositories/AudioRepository";
 import { useAudioPlayer } from "expo-audio";
 import { Middleware } from "@/repositories/Middleware";
 import { router } from "expo-router";
-import { useSession } from "../context/AuthContext";
+import { useSession } from "@/context/AuthContext";
 
 const sh = Dimensions.get("window").height * 0.5;
 const aspectRatio = 2 / 3;
@@ -89,7 +89,7 @@ function Index(): React.JSX.Element {
     };
   }, []);
 
-  const player = useAudioPlayer(null);
+  const player = useAudioPlayer("");
 
   const {isLoading, accessToken, refreshToken, refresh} = useSession();
 
@@ -137,7 +137,8 @@ function Index(): React.JSX.Element {
     const play = async () => {
       if (!trackID) return;
       player?.pause();
-      player?.replace({uri: `http://localhost:8083/v1/audio/${trackID}/stream`});
+      const url = `http://${Platform.OS === 'web' ? 'localhost' : '10.0.2.2'}:8083/v1/audio/${trackID}/stream`;
+      player?.replace({uri: url});
       player?.play();
       console.log("playing");
     };

@@ -3,7 +3,7 @@ import { TouchableOpacity, View, Text, Alert } from "react-native";
 import styles from "./VerifyButtonStyles.tsx";
 import { AuthRepository } from "@/repositories/AuthRepository.tsx";
 import { router } from "expo-router";
-import { useUserContext } from "@/app/context/UserContext.tsx";
+import { useUserContext } from "@/context/UserContext.tsx";
 
 type VerifyProps = {
   code: string;
