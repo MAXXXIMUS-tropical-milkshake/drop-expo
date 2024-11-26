@@ -7,7 +7,7 @@
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web",
+    "web": "expo start --web --port 8082",
     "test": "jest --watchAll",
     "lint": "expo lint",
     "build-web": "expo export -p web && npx workbox-cli generateSW workbox-config.js",

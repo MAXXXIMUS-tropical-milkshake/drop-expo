@@ -13,34 +13,34 @@ export default function RootLayout() {
     return;
   }
 
-  // if (!true) {
+  // if (!refreshToken) {
   //   return <Redirect href="/signup" />;
   // }
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarStyle: { display: "none" },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Feed",
-          header: () =>
-            HomeScreenHeader({
-              visible: filtersModalVisible,
-              setVisible: setFiltersModalVisible,
-            }),
-        }}
-      />
-      <Tabs.Screen
-        name={"upload"}
-        getId={() => "Upload"}
-        options={{
-          header: () => BeatUploadScreenHeader(),
-        }}
-      />
-    </Tabs>
-  );
+    return (
+        <Tabs
+            screenOptions={{
+                tabBarStyle: {display: "none"},
+            }}
+        >
+            <Tabs.Screen
+                name="index"
+                options={{
+                    title: "Feed",
+                    header: () =>
+                        HomeScreenHeader({
+                            visible: filtersModalVisible,
+                            setVisible: setFiltersModalVisible,
+                        }),
+                }}
+            />
+            <Tabs.Screen
+                name={"upload"}
+                getId={() => "Upload"}
+                options={{
+                    header: () => BeatUploadScreenHeader(),
+                }}
+            />
+        </Tabs>
+    );
 }

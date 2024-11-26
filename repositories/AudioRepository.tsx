@@ -1,6 +1,7 @@
 import { Result } from "./Response";
+import {ip} from "@/repositories/IpHardCoded.tsx";
 
-const baseURL = "http://localhost:8081";
+const baseURL = ip;//"http://localhost:8081";
 
 export type FeedResponse = {
   id: string;
