@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   Alert,
@@ -18,8 +18,8 @@ import Animated, { interpolate } from "react-native-reanimated";
 import { AudioRepository } from "@/repositories/AudioRepository";
 import { useAudioPlayer } from "expo-audio";
 import { Middleware } from "@/repositories/Middleware";
-import { useStorageState } from "@/hooks/useStorageState.tsx";
 import { router } from "expo-router";
+import { useSession } from "../context/AuthContext";
 
 const sh = Dimensions.get("window").height * 0.5;
 const aspectRatio = 2 / 3;
@@ -91,8 +91,7 @@ function Index(): React.JSX.Element {
 
   const player = useAudioPlayer(null);
 
-  const [[isAccessTokenLoading, accessToken], setAccessToken] = useStorageState("accessToken");
-  const [[isRefreshTokenLoading, refreshToken], setRefreshToken] = useStorageState("refreshToken");
+  const {isLoading, accessToken, refreshToken, refresh} = useSession();
 
   const [trackID, setTrackID] = React.useState<string | null>(null);
   const [curIndex, setCurIndex] = React.useState<number | null>(null);
@@ -104,18 +103,16 @@ function Index(): React.JSX.Element {
       const card1 = await Middleware.withRefreshToken(
         {
           accessToken: accessToken,
-          setAccessToken: setAccessToken,
+          refresh: refresh,
           refreshToken: refreshToken,
-          setRefreshToken: setRefreshToken,
         },
         AudioRepository.feed,
       );
       const card2 = await Middleware.withRefreshToken(
         {
           accessToken: accessToken,
-          setAccessToken: setAccessToken,
+          refresh: refresh,
           refreshToken: refreshToken,
-          setRefreshToken: setRefreshToken,
         },
         AudioRepository.feed,
       );
@@ -134,7 +131,7 @@ function Index(): React.JSX.Element {
     };
 
     preload().catch((e) => console.error(e));
-  }, [isAccessTokenLoading, isRefreshTokenLoading]);
+  }, [isLoading]);
 
   useEffect(() => {
     const play = async () => {
@@ -146,7 +143,7 @@ function Index(): React.JSX.Element {
     };
 
     play().catch((e) => console.error(e));
-  }, [curIndex, isAccessTokenLoading, isRefreshTokenLoading]);
+  }, [curIndex, isLoading]);
 
   const [isPaused, setIsPaused] = React.useState(true);
   useEffect(() => {
@@ -166,15 +163,13 @@ function Index(): React.JSX.Element {
       const data = await Middleware.withRefreshToken(
         {
           accessToken: accessToken,
-          setAccessToken: setAccessToken,
+          refresh: refresh,
           refreshToken: refreshToken,
-          setRefreshToken: setRefreshToken,
         },
         AudioRepository.feed,
       );
       if (data.success)
-        setIt((prev) => [...prev,
-      {index: it.length, id: data.data.id, name: data.data.name, artist: data.data.beatmaker.pseudonym}]);
+        setIt((prev) => [...prev, {index: it.length, id: data.data.id, name: data.data.name, artist: data.data.beatmaker.pseudonym}]);
       else if (data.data.status === 401) {
         setCurIndex(null);
         router.push("/(auth)/login");
@@ -212,7 +207,7 @@ function Index(): React.JSX.Element {
           snapEnabled={true}
           pagingEnabled={true}
           mode="parallax"
-          overscrollEnabled={false}
+          overscrollEnabled={true}
           loop={false}
           modeConfig={{
             parallaxScrollingOffset: 50,

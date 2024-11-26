@@ -6,12 +6,14 @@ import {LoginRequest, AuthRepository} from '@/repositories/AuthRepository'
 const AuthContext = createContext<{
     signIn: (props: LoginRequest) => Promise<boolean>;
     signOut: () => void;
+    refresh: (accessToken: string | null, refreshToken: string | null) => void;
     accessToken?: string | null;
     refreshToken?: string | null;
     isLoading: boolean;
 }>({
     signIn: () => Promise.resolve(false),
     signOut: () => null,
+    refresh: () => null,
     accessToken: null,
     refreshToken: null,
     isLoading: false,
@@ -48,6 +50,10 @@ export function SessionProvider({children}: PropsWithChildren) {
                 signOut: () => {
                     setAccessToken(null);
                     setRefreshToken(null);
+                },
+                refresh: (accessToken: string | null, refreshToken: string | null) => {
+                    setAccessToken(accessToken);
+                    setRefreshToken(refreshToken);
                 },
                 accessToken,
                 refreshToken,
