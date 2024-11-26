@@ -18,7 +18,7 @@ type LoginFormProps = {
 function LoginForm(props: LoginFormProps): React.JSX.Element {
   return (
     <View>
-      <View style={styles.input}>
+      <View>
         <Text style={styles.inputLabel}>Email address</Text>
         <TextInput
           autoCapitalize="none"
@@ -33,7 +33,7 @@ function LoginForm(props: LoginFormProps): React.JSX.Element {
           }
         />
       </View>
-      <View style={styles.input}>
+      <View>
         <Text style={styles.inputLabel}>Password</Text>
         <TextInput
           secureTextEntry
