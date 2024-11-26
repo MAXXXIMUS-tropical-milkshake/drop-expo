@@ -15,12 +15,11 @@ import Carousel from "react-native-reanimated-carousel";
 import { ICarouselInstance } from "react-native-reanimated-carousel";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { interpolate } from "react-native-reanimated";
-import { AudioRepository, FeedResponse } from "@/repositories/AudioRepository";
+import { AudioRepository } from "@/repositories/AudioRepository";
 import { useAudioPlayer } from "expo-audio";
 import { Middleware } from "@/repositories/Middleware";
 import { useStorageState } from "@/hooks/useStorageState.tsx";
 import { router } from "expo-router";
-import { Result } from "@/repositories/Response";
 
 const sh = Dimensions.get("window").height * 0.5;
 const aspectRatio = 2 / 3;
@@ -125,7 +124,8 @@ function Index(): React.JSX.Element {
         setTrackID(card1.data.id);
         setIsPaused(false);
         setCurIndex(0);
-        setIt([{index: 0, id: card1.data.id, name: card1.data.name, artist: card1.data.beatmaker.pseudonym}, {index: 1, id: card2.data.id, name: card2.data.name, artist: card2.data.beatmaker.pseudonym}]);
+        setIt([{index: 0, id: card1.data.id, name: card1.data.name, artist: card1.data.beatmaker.pseudonym},
+          {index: 1, id: card2.data.id, name: card2.data.name, artist: card2.data.beatmaker.pseudonym}]);
         return;
       }
 
@@ -173,7 +173,8 @@ function Index(): React.JSX.Element {
         AudioRepository.feed,
       );
       if (data.success)
-        setIt((prev) => [...prev, {index: it.length, id: data.data.id, name: data.data.name, artist: data.data.beatmaker.pseudonym}]);
+        setIt((prev) => [...prev,
+      {index: it.length, id: data.data.id, name: data.data.name, artist: data.data.beatmaker.pseudonym}]);
       else if (data.data.status === 401) {
         setCurIndex(null);
         router.push("/(auth)/login");
