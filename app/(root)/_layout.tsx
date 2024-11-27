@@ -13,9 +13,9 @@ export default function RootLayout() {
     return;
   }
 
-  if (!refreshToken) {
-    return <Redirect href="/signup" />;
-  }
+  // if (!true) {
+  //   return <Redirect href="/signup" />;
+  // }
 
   return (
     <Tabs
