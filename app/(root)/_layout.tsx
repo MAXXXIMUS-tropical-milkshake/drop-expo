@@ -2,7 +2,7 @@ import { Redirect, Tabs } from "expo-router";
 import React, { useState } from "react";
 import HomeScreenHeader from "@/components/HomeScreenHeader.tsx";
 import BeatUploadScreenHeader from "@/components/BeatUploadScreenHeader.tsx";
-import { useSession } from "@/contexts/AuthContext";
+import { useSession } from "@/context/AuthContext";
 
 export default function RootLayout() {
   const [filtersModalVisible, setFiltersModalVisible] = useState(false);

@@ -9,8 +9,8 @@ import {
 import { useColorScheme } from "@/hooks/useColorScheme.ts";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
-import { SessionProvider } from "./context/AuthContext";
-import { UserProvider } from "./context/UserContext";
+import { SessionProvider } from "@/context/AuthContext";
+import { UserProvider } from "@/context/UserContext";
 
 enableExperimentalWebImplementation(true);
 SplashScreen.preventAutoHideAsync();

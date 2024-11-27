@@ -3,7 +3,7 @@ import { TouchableOpacity, View, Text, Alert } from "react-native"
 import styles from "./LoginButtonStyles.tsx"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { AuthRepository } from "@/repositories/AuthRepository.tsx"
-import { SessionProvider, useSession } from "@/contexts/AuthContext.tsx"
+import { SessionProvider, useSession } from "@/context/AuthContext.tsx"
 import { router } from "expo-router"
 
 type LoginProps = {

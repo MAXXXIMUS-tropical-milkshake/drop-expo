@@ -1,6 +1,8 @@
 import { Result } from "./Response";
+import { Platform } from "react-native";
 
-const baseURL = "http://localhost:8083";
+const baseURL = Platform.OS === 'web' ? 'http://localhost:8083' : 'http://10.0.2.2:8083';
+
 
 export type FeedResponse = {
   id: string;
