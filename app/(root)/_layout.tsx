@@ -2,7 +2,7 @@ import { Redirect, Tabs } from "expo-router";
 import React, { useState } from "react";
 import HomeScreenHeader from "@/components/HomeScreenHeader.tsx";
 import BeatUploadScreenHeader from "@/components/BeatUploadScreenHeader.tsx";
-import { useSession } from "../context/AuthContext";
+import { useSession } from "@/contexts/AuthContext";
 
 export default function RootLayout() {
   const [filtersModalVisible, setFiltersModalVisible] = useState(false);
@@ -13,9 +13,9 @@ export default function RootLayout() {
     return;
   }
 
-  if (!refreshToken) {
-    return <Redirect href="/signup" />;
-  }
+  // if (!true) {
+  //   return <Redirect href="/signup" />;
+  // }
 
   return (
     <Tabs

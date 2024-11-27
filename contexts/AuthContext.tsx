@@ -1,6 +1,6 @@
 import {useContext, createContext, type PropsWithChildren} from 'react';
 import {useStorageState} from '@/hooks/useStorageState.tsx';
-import {LoginRequest, AuthRepository} from '@/repositories/AuthRepository'
+import {LoginRequest, AuthRepository} from '@/repositories/AuthRepository.tsx'
 
 
 const AuthContext = createContext<{

@@ -4,7 +4,7 @@ import {
   type PropsWithChildren,
   useState,
 } from "react";
-import { SignupRequest } from "@/repositories/AuthRepository";
+import { SignupRequest } from "@/repositories/AuthRepository.tsx";
 
 const UserContext = createContext<{
   user: SignupRequest | null;
