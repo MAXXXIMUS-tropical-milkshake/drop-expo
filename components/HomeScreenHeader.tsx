@@ -1,39 +1,106 @@
-import React from "react";
-import {Dimensions, Text, TouchableOpacity, View, StyleSheet} from "react-native";
-import FiltersModal, {FiltersModalProps} from "@/components/FiltersModal.tsx";
-import {router} from "expo-router";
-
+import React, { useState } from "react";
+import { Dimensions, Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import FiltersModal, { FiltersModalProps } from "@/components/FiltersModal.tsx";
+import { router } from "expo-router";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { SquircleView } from "react-native-figma-squircle";
 
 export default function HomeScreenHeader(modalProps: FiltersModalProps): React.JSX.Element {
-    return (
-        <View style={{
-            height: Dimensions.get("window").height * 0.05,
-            backgroundColor: 'red',
-            flexDirection: 'row',
-            display: 'flex',
-            justifyContent: 'space-evenly'
-        }}>
-            <TouchableOpacity style={styles.button} onPress={() => modalProps.setVisible(true)}>
-                <Text style={styles.buttonText}>Filters</Text>
-            </TouchableOpacity>
+  const [searchQuery, setSearchQuery] = useState("");
 
-            <TouchableOpacity style={styles.button} onPress={() => router.push("/(root)/upload")}>
-                <Text style={styles.buttonText}>Upload beat</Text>
-            </TouchableOpacity>
-            <FiltersModal visible={modalProps.visible} setVisible={modalProps.setVisible}/>
+  return (
+    <View style={styles.headerContainer}>
+      <SquircleView
+        style={styles.squircleContainer}
+        squircleParams={{
+          cornerRadius: 60,
+          cornerSmoothing: 1,
+          fillColor: "#1a1a1a",
+        }}
+      >
+        <TouchableOpacity onPress={() => modalProps.setVisible(true)} style={styles.touchable}>
+          <Text style={styles.buttonText}>setting</Text>
+        </TouchableOpacity>
+      </SquircleView>
 
-        </View>);
+      <SquircleView
+        style={[styles.squircleContainer, styles.searchContainer]}
+        squircleParams={{
+          cornerRadius: 60,
+          cornerSmoothing: 1,
+          fillColor: "#1a1a1a",
+        }}
+      >
+        <View style={styles.searchContent}>
+          <Icon name="search" size={15} color="white" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="search"
+            placeholderTextColor="#888"
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
+        </View>
+      </SquircleView>
+
+      <SquircleView
+        style={styles.squircleContainer}
+        squircleParams={{
+          cornerRadius: 60,
+          cornerSmoothing: 1,
+          fillColor: "#1a1a1a",
+        }}
+      >
+        <TouchableOpacity onPress={() => router.push("/(root)/upload")} style={styles.touchable}>
+          <Text style={styles.buttonText}>upload beat</Text>
+        </TouchableOpacity>
+      </SquircleView>
+
+      <FiltersModal visible={modalProps.visible} setVisible={modalProps.setVisible} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    button: {
-        margin: 10,
-        backgroundColor: 'grey',
-        flexDirection: 'column',
-    },
-    buttonText: {
-        margin: 10,
-        alignSelf: 'center',
-
-    }
+  headerContainer: {
+    height: Dimensions.get("window").height * 0.07,
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  squircleContainer: {
+    width: "12%",
+    height: "60%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  touchable: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "700",
+    textAlign: "center",
+  },
+  searchContainer: {
+    width: "25%",
+  },
+  searchContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  searchInput: {
+    flex: 1,
+    color: "white",
+    fontSize: 14,
+    marginLeft: 10,
+  },
 });

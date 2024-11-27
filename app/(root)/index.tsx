@@ -1,3 +1,4 @@
+
 import React, { useContext, useEffect, useState } from "react";
 import { Platform } from "react-native";
 import {
@@ -15,10 +16,11 @@ import Carousel from "react-native-reanimated-carousel";
 import { ICarouselInstance } from "react-native-reanimated-carousel";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { interpolate } from "react-native-reanimated";
-import { AudioRepository } from "@/repositories/AudioRepository";
+import { AudioRepository, FeedResponse } from "@/repositories/AudioRepository";
 import { useAudioPlayer } from "expo-audio";
 import { Middleware } from "@/repositories/Middleware";
 import { router } from "expo-router";
+import { Result } from "@/repositories/Response";
 import { useSession } from "@/context/AuthContext";
 
 const sh = Dimensions.get("window").height * 0.5;
@@ -152,6 +154,68 @@ function Index(): React.JSX.Element {
     else player?.play();
   }, [isPaused])
 
+  const [[isAccessTokenLoading, accessToken], setAccessToken] = useStorageState("accessToken");
+  const [[isRefreshTokenLoading, refreshToken], setRefreshToken] = useStorageState("refreshToken");
+
+  const [trackID, setTrackID] = React.useState<string | null>(null);
+  const [curIndex, setCurIndex] = React.useState<number | null>(null);
+
+  useEffect(() => {
+    if (!accessToken || !refreshToken) return;
+
+    const preload = async () => {
+      const card1 = await Middleware.withRefreshToken(
+        {
+          accessToken: accessToken,
+          setAccessToken: setAccessToken,
+          refreshToken: refreshToken,
+          setRefreshToken: setRefreshToken,
+        },
+        AudioRepository.feed,
+      );
+      const card2 = await Middleware.withRefreshToken(
+        {
+          accessToken: accessToken,
+          setAccessToken: setAccessToken,
+          refreshToken: refreshToken,
+          setRefreshToken: setRefreshToken,
+        },
+        AudioRepository.feed,
+      );
+
+      if (card1.success && card2.success) {
+        setTrackID(card1.data.id);
+        setIsPaused(false);
+        setCurIndex(0);
+        setIt([{index: 0, id: card1.data.id, name: card1.data.name, artist: card1.data.beatmaker.pseudonym}, {index: 1, id: card2.data.id, name: card2.data.name, artist: card2.data.beatmaker.pseudonym}]);
+        return;
+      }
+
+      setCurIndex(null);
+      router.push("/(auth)/login");
+    };
+
+    preload().catch((e) => console.error(e));
+  }, [isAccessTokenLoading, isRefreshTokenLoading]);
+
+  useEffect(() => {
+    const play = async () => {
+      if (!trackID) return;
+      player?.pause();
+      player?.replace({uri: `http://localhost:8083/v1/audio/${trackID}/stream`});
+      player?.play();
+      console.log("playing");
+    };
+
+    play().catch((e) => console.error(e));
+  }, [curIndex, isAccessTokenLoading, isRefreshTokenLoading]);
+
+  const [isPaused, setIsPaused] = React.useState(true);
+  useEffect(() => {
+    if (isPaused) player?.pause();
+    else player?.play();
+  }, [isPaused])
+
   const onSnapToItem = async (index: number) => {
     if (!accessToken || !refreshToken) {
       return;
@@ -208,7 +272,7 @@ function Index(): React.JSX.Element {
           snapEnabled={true}
           pagingEnabled={true}
           mode="parallax"
-          overscrollEnabled={true}
+          overscrollEnabled={false}
           loop={false}
           modeConfig={{
             parallaxScrollingOffset: 50,
