@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useContext, useEffect, useState } from "react";
+import { Platform } from "react-native";
 import {
   Alert,
   Dimensions,
@@ -16,17 +16,17 @@ import { ICarouselInstance } from "react-native-reanimated-carousel";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { interpolate } from "react-native-reanimated";
 import { AudioRepository } from "@/repositories/AudioRepository";
-import { AudioPlayer, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { Middleware } from "@/repositories/Middleware";
-import { useStorageState } from "@/hooks/useStorageState.tsx";
 import { router } from "expo-router";
+import { useSession } from "@/context/AuthContext";
 
 const sh = Dimensions.get("window").height * 0.5;
 const aspectRatio = 2 / 3;
 const w = Dimensions.get("window").width;
 const h = Dimensions.get("window").height;
 
-function Item(it: number, player: AudioPlayer): React.JSX.Element {
+function Item(it: number, {id}: {id: string}, isPaused: boolean, setIsPaused: (isPaused: boolean) => void): React.JSX.Element {
   return (
     <Animated.View
       style={{
@@ -51,13 +51,12 @@ function Item(it: number, player: AudioPlayer): React.JSX.Element {
         }}
       >
         <View>
-          <TrackForm form={{ id: "" }} setForm={() => {}}></TrackForm>
+          <TrackForm form={{ id: id }} setForm={() => {}}></TrackForm>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              console.log("handle play");
-              if (player.paused) player.play();
-              else player.pause();
+              if (isPaused) setIsPaused(false);
+              else setIsPaused(true);
             }}
           >
             <Text>{it.toString()}</Text>
@@ -68,8 +67,15 @@ function Item(it: number, player: AudioPlayer): React.JSX.Element {
   );
 }
 
+type Card = {
+  index: number;
+  id: string;
+  name: string;
+  artist: string;
+};
+
 function Index(): React.JSX.Element {
-  const it = [1, 2, 3, 4, 5];
+  const [it, setIt] = useState<Card[]>([]);
 
   const ref = React.useRef<ICarouselInstance>(null);
   const animationStyle = React.useCallback((value: number) => {
@@ -83,34 +89,93 @@ function Index(): React.JSX.Element {
     };
   }, []);
 
-  const [[, accessToken], setAccessToken] = useStorageState("accessToken");
-  const [[, refreshToken], setRefreshToken] = useStorageState("refreshToken");
+  const player = useAudioPlayer("");
 
-  const player = useAudioPlayer(null);
+  const {isLoading, accessToken, refreshToken, refresh} = useSession();
+
+  const [trackID, setTrackID] = React.useState<string | null>(null);
+  const [curIndex, setCurIndex] = React.useState<number | null>(null);
+
+  useEffect(() => {
+    if (!accessToken || !refreshToken) return;
+
+    const preload = async () => {
+      const card1 = await Middleware.withRefreshToken(
+        {
+          accessToken: accessToken,
+          refresh: refresh,
+          refreshToken: refreshToken,
+        },
+        AudioRepository.feed,
+      );
+      const card2 = await Middleware.withRefreshToken(
+        {
+          accessToken: accessToken,
+          refresh: refresh,
+          refreshToken: refreshToken,
+        },
+        AudioRepository.feed,
+      );
+
+      if (card1.success && card2.success) {
+        setTrackID(card1.data.id);
+        setIsPaused(false);
+        setCurIndex(0);
+        setIt([{index: 0, id: card1.data.id, name: card1.data.name, artist: card1.data.beatmaker.pseudonym},
+          {index: 1, id: card2.data.id, name: card2.data.name, artist: card2.data.beatmaker.pseudonym}]);
+        return;
+      }
+
+      setCurIndex(null);
+      router.push("/(auth)/login");
+    };
+
+    preload().catch((e) => console.error(e));
+  }, [isLoading]);
+
+  useEffect(() => {
+    const play = async () => {
+      if (!trackID) return;
+      player?.pause();
+      const url = `http://${Platform.OS === 'web' ? 'localhost' : '10.0.2.2'}:8083/v1/audio/${trackID}/stream`;
+      player?.replace({uri: url});
+      player?.play();
+      console.log("playing");
+    };
+
+    play().catch((e) => console.error(e));
+  }, [curIndex, isLoading]);
+
+  const [isPaused, setIsPaused] = React.useState(true);
+  useEffect(() => {
+    if (isPaused) player?.pause();
+    else player?.play();
+  }, [isPaused])
 
   const onSnapToItem = async (index: number) => {
     if (!accessToken || !refreshToken) {
       return;
     }
 
-    const data = await Middleware.withRefreshToken(
-      {
-        accessToken: accessToken,
-        setAccessToken: setAccessToken,
-        refreshToken: refreshToken,
-        setRefreshToken: setRefreshToken,
-      },
-      AudioRepository.feed,
-    );
-    if (data.success) {
-      player.pause();
-      player.replace(`http://localhost:8081/v1/audio/${data.data.id}/stream`);
-      player.play();
-      console.log("playing");
-    } else if (data.data.status === 401) {
-      router.push("/(auth)/login");
-    } else {
-      Alert.alert(data.data.message);
+    setTrackID(it[index].id);
+    setCurIndex(index);
+    setIsPaused(false);
+    if (index === it.length - 1) {
+      const data = await Middleware.withRefreshToken(
+        {
+          accessToken: accessToken,
+          refresh: refresh,
+          refreshToken: refreshToken,
+        },
+        AudioRepository.feed,
+      );
+      if (data.success)
+        setIt((prev) => [...prev, {index: it.length, id: data.data.id, name: data.data.name, artist: data.data.beatmaker.pseudonym}]);
+      else if (data.data.status === 401) {
+        setCurIndex(null);
+        router.push("/(auth)/login");
+      } else
+        Alert.alert(data.data.message);
     }
   };
 
@@ -143,15 +208,15 @@ function Index(): React.JSX.Element {
           snapEnabled={true}
           pagingEnabled={true}
           mode="parallax"
-          overscrollEnabled={false}
-          loop={true}
+          overscrollEnabled={true}
+          loop={false}
           modeConfig={{
             parallaxScrollingOffset: 50,
           }}
           vertical={true}
           onSnapToItem={onSnapToItem}
           renderItem={({ item }) => {
-            return Item(item, player);
+            return Item(item.index, {id: item.id}, isPaused, setIsPaused);
           }}
         />
       </SafeAreaView>

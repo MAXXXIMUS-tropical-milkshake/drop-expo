@@ -4,8 +4,7 @@ import { Result } from "./Response";
 export type WithRefreshTokenRequest = {
   refreshToken: string;
   accessToken: string;
-  setAccessToken: (token: string) => void;
-  setRefreshToken: (token: string) => void;
+  refresh: (accessToken: string | null, refreshToken: string | null) => void;
 };
 
 export class Middleware {
@@ -25,12 +24,11 @@ export class Middleware {
       });
 
       if (response.success) {
-        refreshToken.setAccessToken(response.data.accessToken);
-        refreshToken.setRefreshToken(response.data.refreshToken);
-
+        refreshToken.refresh(response.data.accessToken, response.data.refreshToken);
         return request(response.data.accessToken);
       }
 
+      refreshToken.refresh(null, null);
       return response;
     }
 
