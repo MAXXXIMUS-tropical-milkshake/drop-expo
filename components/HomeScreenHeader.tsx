@@ -15,8 +15,8 @@ export default function HomeScreenHeader(modalProps: FiltersModalProps): React.J
                 <Text style={styles.buttonText}>setting</Text>
             </TouchableOpacity>
 
-            <View style={styles.button}>
-                <Icon name="search" size={13} color='white'/>
+            <View style={styles.searchButton}>
+                <Icon name="search" size={13} color='white' style={styles.icon}/>
                 <TextInput 
                     style={styles.searchInput}
                     placeholder="search"
@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#1a1a1a",
         borderRadius: 50,
         alignItems: "center",
-        paddingHorizontal: 20,
-        width: 160,
+        paddingHorizontal: 0,
+        // width: 160,
     },
     buttonText: {
         margin: 18,
@@ -60,6 +60,19 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 14,
         fontWeight: '700',
+    },
+    searchButton: {
+        flexDirection: "row",
+        marginTop: 10,
+        marginBottom: 10,
+        backgroundColor: "#1a1a1a",
+        borderRadius: 50,
+        alignItems: "center",
+        // paddingHorizontal: 0,
+        width: 100,
+        overflow: "hidden", 
+        paddingHorizontal: 10,
+        maxWidth: 250,
     },
     searchInput: {
         flex: 1,
@@ -69,5 +82,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '700',
         marginLeft: 7,
+    },
+    icon: {
+        width: 20,
+        textAlign: "center",
     },
 });
