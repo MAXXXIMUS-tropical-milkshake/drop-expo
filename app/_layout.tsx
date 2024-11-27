@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { SessionProvider } from "./context/AuthContext";
 import { UserProvider } from "./context/UserContext";
 
+enableExperimentalWebImplementation(true);
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

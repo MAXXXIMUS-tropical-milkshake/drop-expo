@@ -4,7 +4,7 @@ import SignupForm from "@/components/SignupForm/SignupForm.tsx";
 import SignupButton from "@/components/SignupButton/SignupButton.tsx";
 import {PageProp} from "../../components/PageProps.tsx";
 import {router} from "expo-router";
-import { UserProvider } from "../context/UserContext"
+import { UserProvider } from "@/contexts/UserContext"
 
 
 function Signup({navigation}: PageProp): React.JSX.Element {
