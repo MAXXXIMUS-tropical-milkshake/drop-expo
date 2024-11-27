@@ -137,7 +137,7 @@ function Index(): React.JSX.Element {
     const play = async () => {
       if (!trackID) return;
       player?.pause();
-      const url = `http://${Platform.OS === 'web' ? 'localhost' : '10.0.2.2'}:8083/v1/audio/${trackID}/stream`;
+      const url = `http://192.168.212.26:8083/v1/audio/${trackID}/stream`;
       player?.replace({uri: url});
       player?.play();
       console.log("playing");
