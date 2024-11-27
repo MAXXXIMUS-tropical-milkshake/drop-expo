@@ -1,90 +1,106 @@
 import React, { useState } from "react";
-import {Dimensions, Text, TouchableOpacity, View, StyleSheet, TextInput} from "react-native";
-import FiltersModal, {FiltersModalProps} from "@/components/FiltersModal.tsx";
-import {router} from "expo-router";
+import { Dimensions, Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import FiltersModal, { FiltersModalProps } from "@/components/FiltersModal.tsx";
+import { router } from "expo-router";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import { SquircleView } from "react-native-figma-squircle";
 
 export default function HomeScreenHeader(modalProps: FiltersModalProps): React.JSX.Element {
-    const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-    return (
-        <View style={styles.headerContainer}>
+  return (
+    <View style={styles.headerContainer}>
+      <SquircleView
+        style={styles.squircleContainer}
+        squircleParams={{
+          cornerRadius: 60,
+          cornerSmoothing: 1,
+          fillColor: "#1a1a1a",
+        }}
+      >
+        <TouchableOpacity onPress={() => modalProps.setVisible(true)} style={styles.touchable}>
+          <Text style={styles.buttonText}>setting</Text>
+        </TouchableOpacity>
+      </SquircleView>
 
-            <TouchableOpacity style={styles.button} onPress={() => modalProps.setVisible(true)}>
-                <Text style={styles.buttonText}>setting</Text>
-            </TouchableOpacity>
+      <SquircleView
+        style={[styles.squircleContainer, styles.searchContainer]}
+        squircleParams={{
+          cornerRadius: 60,
+          cornerSmoothing: 1,
+          fillColor: "#1a1a1a",
+        }}
+      >
+        <View style={styles.searchContent}>
+          <Icon name="search" size={15} color="white" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="search"
+            placeholderTextColor="#888"
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
+        </View>
+      </SquircleView>
 
-            <View style={styles.searchButton}>
-                <Icon name="search" size={13} color='white' style={styles.icon}/>
-                <TextInput 
-                    style={styles.searchInput}
-                    placeholder="search"
-                    placeholderTextColor='#888'
-                    value={searchQuery}
-                    onChangeText={(text) => setSearchQuery(text)}
-                />
-            </View>
+      <SquircleView
+        style={styles.squircleContainer}
+        squircleParams={{
+          cornerRadius: 60,
+          cornerSmoothing: 1,
+          fillColor: "#1a1a1a",
+        }}
+      >
+        <TouchableOpacity onPress={() => router.push("/(root)/upload")} style={styles.touchable}>
+          <Text style={styles.buttonText}>upload beat</Text>
+        </TouchableOpacity>
+      </SquircleView>
 
-            <TouchableOpacity style={styles.button} onPress={() => router.push("/(root)/upload")}>
-                <Text style={styles.buttonText}>upload beat</Text>
-            </TouchableOpacity>
-
-            <FiltersModal visible={modalProps.visible} setVisible={modalProps.setVisible}/>
-
-        </View>);
+      <FiltersModal visible={modalProps.visible} setVisible={modalProps.setVisible} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    headerContainer: {
-        height: Dimensions.get("window").height * 0.07,
-        backgroundColor: 'transparent',
-        flexDirection: 'row',
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        paddingHorizontal: 20,
-    },
-    button: {
-        flexDirection: "row",
-        marginTop: 10,
-        marginBottom: 10,
-        backgroundColor: "#1a1a1a",
-        borderRadius: 50,
-        alignItems: "center",
-        paddingHorizontal: 0,
-        // width: 160,
-    },
-    buttonText: {
-        margin: 18,
-        alignSelf: 'center',
-        color: 'white',
-        fontSize: 14,
-        fontWeight: '700',
-    },
-    searchButton: {
-        flexDirection: "row",
-        marginTop: 10,
-        marginBottom: 10,
-        backgroundColor: "#1a1a1a",
-        borderRadius: 50,
-        alignItems: "center",
-        // paddingHorizontal: 0,
-        width: 100,
-        overflow: "hidden", 
-        paddingHorizontal: 10,
-        maxWidth: 250,
-    },
-    searchInput: {
-        flex: 1,
-        margin: 18,
-        alignSelf: 'center',
-        color: 'white',
-        fontSize: 14,
-        fontWeight: '700',
-        marginLeft: 7,
-    },
-    icon: {
-        width: 20,
-        textAlign: "center",
-    },
+  headerContainer: {
+    height: Dimensions.get("window").height * 0.07,
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  squircleContainer: {
+    width: "12%",
+    height: "60%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  touchable: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "700",
+    textAlign: "center",
+  },
+  searchContainer: {
+    width: "25%",
+  },
+  searchContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  searchInput: {
+    flex: 1,
+    color: "white",
+    fontSize: 14,
+    marginLeft: 10,
+  },
 });
