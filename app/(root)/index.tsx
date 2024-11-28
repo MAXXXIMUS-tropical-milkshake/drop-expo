@@ -20,13 +20,24 @@ import { useAudioPlayer } from "expo-audio";
 import { Middleware } from "@/repositories/Middleware";
 import { router } from "expo-router";
 import { useSession } from "@/context/AuthContext";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const sh = Dimensions.get("window").height * 0.5;
 const aspectRatio = 2 / 3;
 const w = Dimensions.get("window").width;
 const h = Dimensions.get("window").height;
+type Card = {
+  index: number;
+  id: string;
+  name: string;
+  artist: string;
+};
 
-function Item(it: number, {id}: {id: string}, isPaused: boolean, setIsPaused: (isPaused: boolean) => void): React.JSX.Element {
+function Item(
+  it: number, 
+  {id, name, artist}: {id: string; name: string; artist: string}, 
+  isPaused: boolean, 
+  setIsPaused: (isPaused: boolean) => void): React.JSX.Element {
   return (
       <Animated.View
           style={{
@@ -41,16 +52,35 @@ function Item(it: number, {id}: {id: string}, isPaused: boolean, setIsPaused: (i
             squircleParams={{
               cornerRadius: 60,
               cornerSmoothing: 1,
-              fillColor: "#a23ba5",
+              fillColor: "#ff3d4d",
             }}
             style={{
               width: aspectRatio * sh,
               height: sh,
               alignSelf: "center",
               margin: 0,
+              padding: 20,
             }}
-        >
+          >
           <View>
+            <Text style={styles.trackTitle}>{name || "Untitled"}</Text>
+            <Text style={styles.artistName}>{artist || "Unknown Artist"}</Text>
+          </View>
+
+          <View style={styles.centerContent}>
+            <TouchableOpacity
+              style={styles.pauseButton}
+              onPress={() => setIsPaused(!isPaused)}
+            >
+              <Icon
+                name={isPaused ? "play" : "pause"}
+                size={27}
+                color="#fff"
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* <View>
             <TrackForm form={{ id: id }} setForm={() => {}}></TrackForm>
             <TouchableOpacity
                 style={styles.button}
@@ -61,18 +91,24 @@ function Item(it: number, {id}: {id: string}, isPaused: boolean, setIsPaused: (i
             >
               <Text>{it.toString()}</Text>
             </TouchableOpacity>
+          </View> */}
+
+          <View style={styles.footer}>
+            <TouchableOpacity style={styles.iconButton}>
+              <Icon name="paper-plane" size={20} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconButton}>
+              <Icon name="download" size={20} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconButton}>
+              <Icon name="share" size={20} color="#fff" />
+            </TouchableOpacity>
           </View>
         </SquircleView>
       </Animated.View>
   );
 }
 
-type Card = {
-  index: number;
-  id: string;
-  name: string;
-  artist: string;
-};
 
 function Index(): React.JSX.Element {
   const [it, setIt] = useState<Card[]>([]);
@@ -88,6 +124,7 @@ function Index(): React.JSX.Element {
       opacity,
     };
   }, []);
+
 
   const player = useAudioPlayer("");
 
@@ -196,7 +233,7 @@ function Index(): React.JSX.Element {
               scrollAnimationDuration={500}
               width={w}
               height={h}
-              data={it}
+              data={[{index: 1 as number, id: "1"}]}
               style={{
                 height: h,
                 alignSelf: "center",
@@ -216,7 +253,7 @@ function Index(): React.JSX.Element {
               vertical={true}
               onSnapToItem={onSnapToItem}
               renderItem={({ item }) => {
-                return Item(item.index, {id: item.id}, isPaused, setIsPaused);
+                return Item(item.index, {id: item.id, name: item.name, artist: item.artist}, isPaused, setIsPaused);
               }}
           />
         </SafeAreaView>
@@ -235,5 +272,45 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  trackTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#000",
+  },
+  artistName: {
+    fontSize: 16,
+    color: "#555",
+    fontWeight: "500",
+    marginTop: 5,
+  },
+  centerContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  pauseButton: {
+    width: "27%",
+    height: "23%",
+    borderRadius: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  iconButton: {
+    backgroundColor: "#1a1a1a",
+    width: "23%",
+    height: "240%",
+    borderRadius: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
